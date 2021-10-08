@@ -1,0 +1,38 @@
+INSERT INTO user (username, email) VALUES ("coolguy01", "test1@gmail.com");
+INSERT INTO user (username, email) VALUES ("coolguy02", "test1@gmail.com");
+INSERT INTO user (username, email) VALUES ("coolguy03", "test2@gmail.com");
+INSERT INTO user (username, email) VALUES ("coolguy04", "test2@gmail.com");
+INSERT INTO user (username, email) VALUES ("coolguy05", "test3@gmail.com");
+INSERT INTO user (username, email) VALUES ("coolguy06", "test3@gmail.com");
+INSERT INTO user (username, email) VALUES ("coolguy07", "test4@gmail.com");
+INSERT INTO user (username, email) VALUES ("coolguy08", "test4@gmail.com");
+
+
+INSERT INTO car (car_id, make, model, year, trim, package, tank_max, mpg) VALUES (1, "Nissan", "Altima", 2006, "3.5 Special", "Deluxe", 20.1, 30.2);
+INSERT INTO car (car_id, make, model, year, trim, package, tank_max, mpg) VALUES (2, "Honda", "Civic", 2012, "R", "Sweet", 40.6, 10);
+INSERT INTO car (car_id, make, model, year, trim, package, tank_max, mpg) VALUES (3, "Hyundai", "Elantra", 2021, "Limited", "Premium", 34.7, 15.12);
+INSERT INTO car (car_id, make, model, year, trim, package, tank_max, mpg) VALUES (4, "Jeep", "Wrangler", 2015, "Expedition", "Technology", 41, 20);
+INSERT INTO car (car_id, make, model, year, trim, package, tank_max, mpg) VALUES (5, "Honda", "Accord", 2010, "Sport", "Navigation", 30, 30);
+INSERT INTO car (car_id, make, model, year, trim, package, tank_max, mpg) VALUES (6, "Nissan", "Altima", 2016, "3.5 Special", "Weather", 20.1, 15);
+
+INSERT INTO trip (trip_id, car_id, username, start_adr, end_adr, distance) VALUES (1, 2, "coolguy02", "312 Downing Street", "555 Fire Hydrant Lane", 12.2);
+INSERT INTO trip (trip_id, car_id, username, start_adr, end_adr, distance) VALUES (2, 3, "coolguy03", "34 Chestnut Street", "12 Candy Lane", 31);
+INSERT INTO trip (trip_id, car_id, username, start_adr, end_adr, distance) VALUES (3, 2, "coolguy08", "45 Carmichael Ave", "332 East Burlap Blv.", 324);
+INSERT INTO trip (trip_id, car_id, username, start_adr, end_adr, distance) VALUES (4, 1, "coolguy03", "12 Scranton Street", "21 Main Street", 44);
+INSERT INTO trip (trip_id, car_id, username, start_adr, end_adr, distance) VALUES (5, 4, "coolguy04", "32 Brunswick Lane", "122 Tinton Ave", 5);
+INSERT INTO trip (trip_id, car_id, username, start_adr, end_adr, distance) VALUES (6, 6, "coolguy05", "1232 Shafto Road", "26 West Cherry Street", 34);
+INSERT INTO trip (trip_id, car_id, username, start_adr, end_adr, distance) VALUES (7, 5, "coolguy01", "98 Tucson Ave", "334 Nikon Place", 15);
+
+INSERT INTO user_owned_car (username, car_id, color, current_fuel) VALUES ("coolguy01", 1, "blue", 12);
+INSERT INTO user_owned_car (username, car_id, color, current_fuel) VALUES ("coolguy02", 2, "brown", 1);
+INSERT INTO user_owned_car (username, car_id, color, current_fuel) VALUES ("coolguy03", 3, "teal", 43);
+INSERT INTO user_owned_car (username, car_id, color, current_fuel) VALUES ("coolguy04", 4, "orange", 4);
+INSERT INTO user_owned_car (username, car_id, color, current_fuel) VALUES ("coolguy05", 5, "green", 1);
+INSERT INTO user_owned_car (username, car_id, color, current_fuel) VALUES ("coolguy06", 6, "red", 41);
+INSERT INTO user_owned_car (username, car_id, color, current_fuel) VALUES ("coolguy07", 1, "purple", 1);
+INSERT INTO user_owned_car (username, car_id, color, current_fuel) VALUES ("coolguy08", 2, "black", 32);
+
+
+
+
+
