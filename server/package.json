@@ -1,0 +1,23 @@
+{
+    "name": "gaspal",
+    "version": "1.0.0",
+    "description": "gaspal",
+    "main": "index.js",
+    "scripts": {
+        "start": "node index.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/dcutalo/GasPal.git"
+    },
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/dcutalo/GasPal/issues"
+    },
+    "homepage": "https://github.com/dcutalo/GasPal#readme",
+    "dependencies": {
+        "express": "^4.17.1",
+        "mysql2": "^2.3.0"
+    }
+}
