@@ -1,23 +1,34 @@
-const express = require('express')
+const express = require('express');
+const connectionRequest = require('./connectionRequest');
 const app = express()
-const port = 3000
+const port = 5000
 
-var mysql = require('mysql2')
-var connection = mysql.createConnection({
-    host: 'gaspal-db.cthfxs3cicdw.us-east-2.rds.amazonaws.com',
-    port: 3306,
-    user: 'admin',
-    password: 'gaspal123',
-    database: 'gaspaldb'
-})
-
-connection.connect();
-connection.query('SELECT * from car', function (err, rows, fields) {
+connection = connectionRequest();
+/*connection.query('SELECT * from car', function (err, rows, fields) {
     if (err) throw err
 
     console.log(rows)
-})
-connection.end();
+})*/
+
+app.get('/trips/:user', (req, res) => {
+    const queryString = "SELECT * from trip WHERE username = ?"
+    connection.query(queryString, [req.params.user], function (err, rows, fields) {
+        
+        if (err) throw err
+        
+        return res.json(rows);
+    })
+});
+
+app.get('/trips', (req, res) => {
+    const queryString = "SELECT * from trip"
+    connection.query(queryString, function (err, rows, fields) {
+        
+        if (err) throw err
+        
+        return res.json(rows);
+    })
+});
 
 app.get('/', (req, res) => {
     res.send('Hello!')
