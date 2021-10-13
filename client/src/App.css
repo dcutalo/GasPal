@@ -14,3 +14,21 @@
   justify-content: center;
   font-size: 3rem;
 }
+
+.gasvalue {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.homeimg {
+  display:block;
+  margin: 0 auto;
+  padding-top: 5%;
+  padding-bottom: 5%;
+}
+
+.gastext {
+  display: flex;
+  padding-left: 42%;
+}
