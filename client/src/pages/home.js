@@ -5,21 +5,19 @@ import '../App.css'
 
 const Home = () => {
   const [a, setName] = useState("");
-  
+  const [c, confirm] = useState("");
   return (
     <div>
-    <img src={gif} style={{padding: 120, justifyContent: 'center',alignItems: 'center'}}/>
-    
-    <div
-          style={{ marginLeft: "40%",}}
-      >
-          <h2>Your gas value:</h2>
+    <img src={gif} className="homeimg"/>
+    <h2 className="gastext">Enter Gas Value:</h2>
+    <div className="gasvalue">
           <TextField
               value={a}
-              label="Enter value"
+              label="Enter your value"
               onChange={(e) => {
                   setName(e.target.value);
               } } />
+              <button style={{ height:30, width: 100}} onClick={() => confirm(true)}>Confirm</button>
           <h3>{a}</h3>
       </div>
     </div>
