@@ -16,6 +16,7 @@
 }
 
 .gasvalue {
+  font-family: monospace;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -29,6 +30,7 @@
 }
 
 .gastext {
+  font-family: monospace;
   display: flex;
   padding-left: 42%;
 }
