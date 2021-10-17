@@ -2,6 +2,7 @@ const express = require('express');
 const connectionRequest = require('./connectionRequest');
 const app = express()
 const port = 5000
+const cors = require('cors')
 
 connection = connectionRequest();
 /*connection.query('SELECT * from car', function (err, rows, fields) {
@@ -9,6 +10,9 @@ connection = connectionRequest();
 
     console.log(rows)
 })*/
+
+//imported and use cors to avoid port problem 
+app.use(cors());
 
 //trip table (needs post, put, delete)
 app.get('/trips/:user', (req, res) => {
