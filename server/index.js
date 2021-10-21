@@ -1,8 +1,14 @@
 const express = require('express');
+const bodyParser = require('body-parser')
+const cors = require('cors')
 const connectionRequest = require('./connectionRequest');
 const app = express()
 const port = 5000
-const cors = require('cors')
+
+app.use(cors());
+app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true}));
 
 connection = connectionRequest();
 /*connection.query('SELECT * from car', function (err, rows, fields) {
@@ -10,9 +16,6 @@ connection = connectionRequest();
 
     console.log(rows)
 })*/
-
-//imported and use cors to avoid port problem 
-app.use(cors());
 
 //trip table (needs post, put, delete)
 app.get('/trips/:user', (req, res) => {
@@ -22,6 +25,23 @@ app.get('/trips/:user', (req, res) => {
         if (err) throw err
         
         return res.json(rows);
+    })
+});
+
+app.post("/trips/insert", (req, res) => {
+    const username = req.body.username
+    const start_adr = req.body.start_adr
+    const end_adr = req.body.end_adr
+    const distance = req.body.distance
+    const queryString = "INSERT INTO trip (username, start_adr, end_adr, distance) VALUES (?,?,?,?);"
+    
+    connection.query(queryString, [username, start_adr, end_adr, distance], function (err, rows, fields) {
+        if (err) {
+            throw err
+        }
+        else {
+            return res.json('Insert succesful');
+        }
     })
 });
 
@@ -47,16 +67,20 @@ app.get('/users/:username', (req, res) => {
     })
 });
 //insert
-app.get('/users/:username/:email', (req, res) => {
+//app.get
+app.post("/users/insert", (req, res) => {
+    const username = req.body.username
+    const email = req.body.email
     const queryString = "INSERT INTO user (username, email) VALUES (?,?);"
-    connection.query(queryString, [req.params.username, req.params.email], function (err, rows, fields) {
-            if (err) {
-                throw err
-            }
-            else {
-                return res.json('Insert succesful');
-            }
-        })
+
+    connection.query(queryString, [username, email], function (err, rows, fields) {
+        if (err) {
+            throw err
+        }
+        else {
+            return res.json('Insert succesful');
+        }
+    })
 });
 //delete
 app.get('/userdelete/:username', (req, res) => {
@@ -93,6 +117,25 @@ app.get('/cars/:car_id', (req, res) => {
     })
 });
 
+app.post("/cars/insert", (req, res) => {
+    const make = req.body.make
+    const model = req.body.model
+    const year = req.body.year
+    const trim = req.body.trim
+    const package = req.body.package
+    const tank_max = req.body.tank_max
+    const queryString = "INSERT INTO user (make, model, year, trim, package, tank_max) VALUES (?,?,?,?,?,?);"
+
+    connection.query(queryString, [make, model, year, trim, package, tank_max], function (err, rows, fields) {
+        if (err) {
+            throw err
+        }
+        else {
+            return res.json('Insert succesful');
+        }
+    })
+});
+
 app.get('/cars', (req, res) => {
     const queryString = "Select * from car"
     connection.query(queryString, function (err, rows, fields) {
@@ -112,6 +155,22 @@ app.get('/usercars/:username', (req, res) => {
         if (err) throw err
 
         return res.json(rows);
+    })
+});
+
+app.post("/userOwnedCar/insert", (req, res) => {
+    const username = req.body.username
+    const color = req.body.color
+    const current_fuel = req.body.current_fuel
+    const queryString = "INSERT INTO user_owned_car (username, color, current_fuel) VALUES (?,?,?);"
+
+    connection.query(queryString, [username, color, current_fuel], function (err, rows, fields) {
+        if (err) {
+            throw err
+        }
+        else {
+            return res.json('Insert succesful');
+        }
     })
 });
 

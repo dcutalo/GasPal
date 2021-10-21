@@ -1,13 +1,25 @@
 import Popup from './userprofile/Popup'
 import { useState } from 'react'
 import '../style/userprofile.css'
+import Axios from "axios";
 
 function UserProfile() {
 const [emailButton, setEmailButton] = useState(false);
 const [userNameBtn, setUserNameBtn] = useState(false);
+//const [username, setUsername] = useState("");
+//const [email, setEmail] = useState("");
 const [changePass, setChangePass] = useState(false);
 const [Logout, setLogout] = useState(false);
 const [DeleteProfile, setDeleteProfile] = useState(false);
+
+//  const submitUser = () => {
+//    Axios.post("http://localhost:5000/users/insert", {
+//      username: username,
+//      email: email,
+//    }).then(() => {
+//      alert("Successful insert");
+//    });
+//  };
 
   return (
     <div className="userp">
