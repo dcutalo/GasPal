@@ -35,6 +35,8 @@ useEffect(() => {
             )}  
         }           
       )}
+
+      
        <button style={{ fontWeight: 'bold', height:30, width: 200}} onClick={() => setEmailButton(true)}>Update Email</button>
        <br></br>
        <br></br>

@@ -158,13 +158,14 @@ app.get('/usercars/:username', (req, res) => {
     })
 });
 
-app.post("/userOwnedCar/insert", (req, res) => {
+app.post("/usercars/insert", (req, res) => {
     const username = req.body.username
+    const car_id = req.body.car_id
     const color = req.body.color
     const current_fuel = req.body.current_fuel
-    const queryString = "INSERT INTO user_owned_car (username, color, current_fuel) VALUES (?,?,?);"
+    const queryString = "INSERT INTO user_owned_car (username, car_id, color, current_fuel) VALUES (?,?,?,?);"
 
-    connection.query(queryString, [username, color, current_fuel], function (err, rows, fields) {
+    connection.query(queryString, [username, car_id, color, current_fuel], function (err, rows, fields) {
         if (err) {
             throw err
         }

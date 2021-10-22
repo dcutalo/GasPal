@@ -3,19 +3,36 @@ import TextField from "@material-ui/core/TextField";
 import '../App.css'
 import GaugeChart from 'react-gauge-chart'
 import Axios from 'axios';
+
 const name = "coolguy03"
 
 const Home = () => {
   const addr = "http://localhost:5000/usercars/" + name
   const [a, setVal] = useState("");
   const [c, setFuel] = useState([]);
-  
+  const [userName, setUsername] = useState("uncoolguy04")
+  const [userCarID, setUserCarID] = useState("1")
+  const [color, setColor] = useState("black")
+  const [c_fuel, setCFuel] = useState("0")
+
   useEffect(() => {
     Axios.get(addr).then((response) => 
     {
       setFuel(response.data.map(item=>item.current_fuel));
     });
   }, []);
+
+  const submitFuel = () => {
+    Axios.post("http://localhost:5000/usercars/insert", {
+      username: userName,
+      car_id: userCarID,
+      color: color,
+      current_fuel: c_fuel
+    }).then(() => {
+      alert("Successful insert");
+    });
+  };
+
   
   return (
     <><div>
@@ -42,8 +59,9 @@ const Home = () => {
             setVal(e.target.value);
           } } />
       </div>
-      <button className="confirmBtn" style={{ height: 40, width: 200 }} onClick={() => setFuel(a)}>Confirm</button>
-    </div><button className="fillUpbtn" style={{ height: 40, width: 200 }} onClick={() => setFuel(100)}>Fill Up</button></>
+      
+      <button className="confirmBtn" style={{ height: 40, width: 200 }} onClick={() => {setFuel(a);submitFuel();}}>Confirm</button>
+    </div><button className="fillUpbtn" style={{ height: 40, width: 200 }} onClick={() => submitFuel()}>Fill Up</button></>
     
   );
 };
