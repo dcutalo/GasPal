@@ -175,6 +175,23 @@ app.post("/usercars/insert", (req, res) => {
     })
 });
 
+app.put("/usercars/update", (req, res) => {
+    const username = req.body.username
+    const car_id = req.body.car_id
+    const color = req.body.color
+    const current_fuel = req.body.current_fuel
+    const queryString = "UPDATE user_owned_car SET current_fuel = current_fuel WHERE username = username and car_id = car_id and color = color;"
+
+    connection.query(queryString, [username, car_id, color, current_fuel], function (err, rows, fields) {
+        if (err) {
+            throw err
+        }
+        else {
+            return res.json('Insert succesful');
+        }
+    })
+});
+
 app.get('/usercars', (req, res) => {
     const queryString = "Select * from user_owned_car"
     connection.query(queryString, function (err, rows, fields) {

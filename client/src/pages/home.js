@@ -10,7 +10,7 @@ const Home = () => {
   const addr = "http://localhost:5000/usercars/" + name
   const [a, setVal] = useState("");
   const [c, setFuel] = useState([]);
-  const [userName, setUsername] = useState("uncoolguy04")
+  const [userName, setUsername] = useState("uncoolguy01")
   const [userCarID, setUserCarID] = useState("1")
   const [color, setColor] = useState("black")
   const [c_fuel, setCFuel] = useState("0")
@@ -23,7 +23,7 @@ const Home = () => {
   }, []);
 
   const submitFuel = () => {
-    Axios.post("http://localhost:5000/usercars/insert", {
+    Axios.put("http://localhost:5000/usercars/update", {
       username: userName,
       car_id: userCarID,
       color: color,
@@ -60,7 +60,7 @@ const Home = () => {
           } } />
       </div>
       
-      <button className="confirmBtn" style={{ height: 40, width: 200 }} onClick={() => {setFuel(a);submitFuel();}}>Confirm</button>
+      <button className="confirmBtn" style={{ height: 40, width: 200 }} onClick={() => setCFuel(a)}>Confirm</button>
     </div><button className="fillUpbtn" style={{ height: 40, width: 200 }} onClick={() => submitFuel()}>Fill Up</button></>
     
   );
