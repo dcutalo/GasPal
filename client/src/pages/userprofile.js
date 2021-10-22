@@ -1,35 +1,44 @@
 import Popup from './userprofile/Popup'
-import { useState } from 'react'
-import '../style/userprofile.css'
-import Axios from "axios";
+import React, {useState, useEffect} from 'react';
+import '../style/userprofile.css';
+import Axios from 'axios';
+const name = "coolguy05"
 
 function UserProfile() {
 const [emailButton, setEmailButton] = useState(false);
-const [userNameBtn, setUserNameBtn] = useState(false);
-//const [username, setUsername] = useState("");
-//const [email, setEmail] = useState("");
+const [userNameBtn, setUserNameBtn] = useState("");
 const [changePass, setChangePass] = useState(false);
 const [Logout, setLogout] = useState(false);
 const [DeleteProfile, setDeleteProfile] = useState(false);
 
-//  const submitUser = () => {
-//    Axios.post("http://localhost:5000/users/insert", {
-//      username: username,
-//      email: email,
-//    }).then(() => {
-//      alert("Successful insert");
-//    });
-//  };
+const [userName, setUsername] = useState([])
+useEffect(() => {
+  Axios.get("http://localhost:5000/users").then((response) => 
+  {
+      setUsername(response.data);
+  });
+}, []);
+
 
   return (
+    
     <div className="userp">
      <main className="btns">
-       <h1 className="profiletext">User Profile</h1>
-       <br></br>
+     <h1 className="profiletext">User Profile</h1>
+     {userName.map((val) => {
+        if (val.username === name){
+            return (    
+                <>
+                <h2>{val.username}</h2><br></br>
+                <h3>{val.email}</h3>
+                </>
+            )}  
+        }           
+      )}
        <button style={{ fontWeight: 'bold', height:30, width: 200}} onClick={() => setEmailButton(true)}>Update Email</button>
        <br></br>
        <br></br>
-       <button style={{ fontWeight: 'bold', height:30, width: 200}} onClick={() => setUserNameBtn(true)}>Change User Name</button>
+       <button style={{ fontWeight: 'bold', height:30, width: 200}} onClick={() => setUserNameBtn()}>Change User Name</button>
        <br></br>
        <br></br>
        <button style={{ fontWeight: 'bold', height:30, width: 200}} onClick={() => setChangePass(true)}>Change Password</button>     

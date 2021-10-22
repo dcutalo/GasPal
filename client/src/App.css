@@ -16,10 +16,9 @@
 }
 
 .gasvalue {
+  margin-left: 30%;
   font-family: monospace;
   display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .homeimg {
@@ -32,5 +31,16 @@
 .gastext {
   font-family: monospace;
   display: flex;
-  padding-left: 42%;
+  margin-left: 30%;
+}
+
+.gauge {
+  margin-left: 15%;
+  align-items: center;
+  justify-content: center;
+}
+
+.fillUpbtn, .confirmBtn {
+  margin-left: 30%;
+  margin-top: 2em;
 }
