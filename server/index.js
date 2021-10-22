@@ -180,9 +180,9 @@ app.put("/usercars/update", (req, res) => {
     const car_id = req.body.car_id
     const color = req.body.color
     const current_fuel = req.body.current_fuel
-    const queryString = "UPDATE user_owned_car SET current_fuel = current_fuel WHERE username = username and car_id = car_id and color = color;"
+    const queryString = `UPDATE user_owned_car SET current_fuel = ${current_fuel} WHERE username = "${username}" and car_id = ${car_id} and color = "${color}";`
 
-    connection.query(queryString, [username, car_id, color, current_fuel], function (err, rows, fields) {
+    connection.query(queryString, function (err, rows, fields) {
         if (err) {
             throw err
         }

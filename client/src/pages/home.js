@@ -16,11 +16,8 @@ const Home = () => {
   const [c_fuel, setCFuel] = useState("0")
 
   useEffect(() => {
-    Axios.get(addr).then((response) => 
-    {
-      setFuel(response.data.map(item=>item.current_fuel));
-    });
-  }, []);
+    submitFuel()
+  }, [c_fuel]);
 
   const submitFuel = () => {
     Axios.put("http://localhost:5000/usercars/update", {
@@ -29,11 +26,17 @@ const Home = () => {
       color: color,
       current_fuel: c_fuel
     }).then(() => {
-      alert("Successful insert");
+      console.log("Successful insert");
     });
   };
 
-  
+  const fillFuel = (input) => {
+    setFuel(input)
+    setCFuel(input)
+    // console.log(c_fuel)
+    // submitFuel()
+  }
+
   return (
     <><div>
       <br></br>
@@ -56,12 +59,12 @@ const Home = () => {
           value={a}
           label="Your Current Fuel %"
           onChange={(e) => {
-            setVal(e.target.value);
+              setVal(e.target.value);
           } } />
       </div>
       
-      <button className="confirmBtn" style={{ height: 40, width: 200 }} onClick={() => setCFuel(a)}>Confirm</button>
-    </div><button className="fillUpbtn" style={{ height: 40, width: 200 }} onClick={() => submitFuel()}>Fill Up</button></>
+      <button className="confirmBtn" style={{ height: 40, width: 200 }} onClick={() => {setFuel(a); setCFuel(a);}}>Confirm</button>
+    </div><button className="fillUpbtn" style={{ height: 40, width: 200 }} onClick={() => {setFuel(100); setCFuel(100);}}>Fill Up</button></>
     
   );
 };
