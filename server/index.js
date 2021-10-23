@@ -193,7 +193,7 @@ app.put("/usercars/update", (req, res) => {
 });
 
 app.get('/usercars', (req, res) => {
-    const queryString = "Select * from user_owned_car"
+    const queryString = "Select * from user_owned_car"  
     connection.query(queryString, function (err, rows, fields) {
 
         if (err) throw err

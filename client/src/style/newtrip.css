@@ -1,0 +1,18 @@
+.newstart, .newdest {
+    margin-left: 30%;
+    font-family: monospace;
+    display: flex;
+  }
+
+.newBtn {
+    font-family: monospace;
+    margin-top: 10%;
+    margin-left: 30%;
+}
+
+.startprompt, .destprompt {
+    margin-left: 30%;
+    margin-top: 8%;
+    font-family: monospace;
+    display: flex;
+}
