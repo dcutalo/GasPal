@@ -45,7 +45,7 @@ const Home = () => {
   }
 
   function validateInput(input) {
-    setValidInput(input < 100 && input.length > 0);
+    setValidInput(input <= 100 && input.length > 0);
   }
 
   function fillFuel(input){
