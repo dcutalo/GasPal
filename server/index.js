@@ -33,9 +33,10 @@ app.post("/trips/insert", (req, res) => {
     const start_adr = req.body.start_adr
     const end_adr = req.body.end_adr
     const distance = req.body.distance
-    const queryString = "INSERT INTO trip (username, start_adr, end_adr, distance) VALUES (?,?,?,?);"
+    const car_id = req.body.car_id
+    const queryString = "INSERT INTO trip (car_id, username, start_adr, end_adr, distance) VALUES (?,?,?,?,?);"
     
-    connection.query(queryString, [username, start_adr, end_adr, distance], function (err, rows, fields) {
+    connection.query(queryString, [car_id, username, start_adr, end_adr, distance], function (err, rows, fields) {
         if (err) {
             throw err
         }
@@ -102,6 +103,36 @@ app.get('/users', (req, res) => {
         if (err) throw err
 
         return res.json(rows);
+    })
+});
+
+app.put("/users/updateUsername", (req, res) => {
+    const username = req.body.username
+    const email = req.body.email
+    const queryString = `UPDATE user SET username = "${username}" WHERE email = "${email}";`
+
+    connection.query(queryString, [username, email], function (err, rows, fields) {
+        if (err) {
+            throw err
+        }
+        else {
+            return res.json('Insert succesful');
+        }
+    })
+});
+
+app.put("/users/updateEmail", (req, res) => {
+    const username = req.body.username
+    const email = req.body.email
+    const queryString = `UPDATE user SET email = "${email}" WHERE username = "${username}";`
+
+    connection.query(queryString, [username, email], function (err, rows, fields) {
+        if (err) {
+            throw err
+        }
+        else {
+            return res.json('Insert succesful');
+        }
     })
 });
 //end
