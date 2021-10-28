@@ -20,7 +20,7 @@ function App() {
         <Route path = '/gasefficiencyreports' component={Reports}/>
         <Route path = '/userprofile' component={UserProfile}/>
         <Route path = '/newtrip' component={NewTrip}/>
-        <Route path = '/maps' component ={MyMap}/>
+        <Route path = '/maps' component={MyMap}/>
       </Switch>
     </Router>
   );
