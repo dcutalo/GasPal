@@ -11,11 +11,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.urlencoded({ extended: true}));
 
 connection = connectionRequest();
-/*connection.query('SELECT * from car', function (err, rows, fields) {
-    if (err) throw err
-
-    console.log(rows)
-})*/
 
 //trip table (needs post, put, delete)
 app.get('/trips/:user', (req, res) => {
@@ -46,6 +41,38 @@ app.post("/trips/insert", (req, res) => {
     })
 });
 
+//delete
+app.delete('/trips/delete', (req, res) => {
+    const trip_id = req.body.trip_id
+    const queryString = "DELETE FROM trip WHERE trip_id = ?"
+    connection.query(queryString, [trip_id], function (err, rows, fields) {
+        if (err) {
+            throw err
+        }
+        else {
+            return res.json('Succesfully removed trip');
+        }
+    })
+});
+
+//do we need update for trips or just have user make new one?
+app.put("/trips/update", (req, res) => {
+    const username = req.body.username
+    const start_adr = req.body.start_adr
+    const end_adr = req.body.end_adr
+    const distance = req.body.distance
+    const queryString = `UPDATE trip SET start_adr = ${start_adr} and end_adr = ${end_adr} and distance = ${distance} WHERE username = "${username}";`
+
+    connection.query(queryString, function (err, rows, fields) {
+        if (err) {
+            throw err
+        }
+        else {
+            return res.json('Update succesful');
+        }
+    })
+});
+
 app.get('/trips', (req, res) => {
     const queryString = "SELECT * from trip"
     connection.query(queryString, function (err, rows, fields) {
@@ -68,7 +95,6 @@ app.get('/users/:username', (req, res) => {
     })
 });
 //insert
-//app.get
 app.post("/users/insert", (req, res) => {
     const username = req.body.username
     const email = req.body.email
@@ -83,10 +109,28 @@ app.post("/users/insert", (req, res) => {
         }
     })
 });
+
+//update (need userID to update?)
+app.put("/users/update", (req, res) => {
+    const username = req.body.username
+    const email = req.body.email
+    const queryString = `UPDATE user SET username = ${username} and email = ${email} WHERE username = "${username}" and email = "${email}";`
+
+    connection.query(queryString, function (err, rows, fields) {
+        if (err) {
+            throw err
+        }
+        else {
+            return res.json('Update succesful');
+        }
+    })
+});
+
 //delete
-app.get('/userdelete/:username', (req, res) => {
+app.delete('/users/delete', (req, res) => {
+    const username = req.body.username
     const queryString = "DELETE FROM user WHERE username = ?"
-    connection.query(queryString, [req.params.username], function (err, rows,fields) {
+    connection.query(queryString, [username], function (err, rows,fields) {
             if (err) {
                 throw err
             }
@@ -137,7 +181,7 @@ app.put("/users/updateEmail", (req, res) => {
 });
 //end
 
-//car table (needs post, put, delete)
+//car table (needs put, delete)
 app.get('/cars/:car_id', (req, res) => {
     const queryString = "SELECT * from car WHERE car_id = ?"
     connection.query(queryString, [req.params.car_id], function (err, rows, fields) {
@@ -148,6 +192,7 @@ app.get('/cars/:car_id', (req, res) => {
     })
 });
 
+//insert
 app.post("/cars/insert", (req, res) => {
     const make = req.body.make
     const model = req.body.model
@@ -155,7 +200,7 @@ app.post("/cars/insert", (req, res) => {
     const trim = req.body.trim
     const package = req.body.package
     const tank_max = req.body.tank_max
-    const queryString = "INSERT INTO user (make, model, year, trim, package, tank_max) VALUES (?,?,?,?,?,?);"
+    const queryString = "INSERT INTO car (make, model, year, trim, package, tank_max) VALUES (?,?,?,?,?,?);"
 
     connection.query(queryString, [make, model, year, trim, package, tank_max], function (err, rows, fields) {
         if (err) {
@@ -163,6 +208,42 @@ app.post("/cars/insert", (req, res) => {
         }
         else {
             return res.json('Insert succesful');
+        }
+    })
+});
+
+//update
+app.put("/cars/update", (req, res) => {
+    const car_id = req.body.car_id
+    const make = req.body.make
+    const model = req.body.model
+    const year = req.body.year
+    const trim = req.body.trim
+    const package = req.body.package
+    const tank_max = req.body.tank_max
+    const queryString = `UPDATE car SET make = ${make} and model = ${model} and year = ${year} 
+                        and trim = ${trim} and package = ${package} and tank_max = ${tank_max} WHERE car_id = "${car_id}";`
+
+    connection.query(queryString, function (err, rows, fields) {
+        if (err) {
+            throw err
+        }
+        else {
+            return res.json('Update succesful');
+        }
+    })
+});
+
+//delete
+app.delete('/cars/delete', (req, res) => {
+    const car_id = req.body.car_id
+    const queryString = "DELETE FROM car WHERE car_id = ?"
+    connection.query(queryString, [car_id], function (err, rows, fields) {
+        if (err) {
+            throw err
+        }
+        else {
+            return res.json('Succesfully removed car');
         }
     })
 });
@@ -178,7 +259,7 @@ app.get('/cars', (req, res) => {
 });
 // end
 
-//user_owned_car (needs post, put, delete)
+//user_owned_car (needs delete)
 app.get('/usercars/:username', (req, res) => {
     const queryString = "SELECT * from user_owned_car WHERE username = ?"
     connection.query(queryString, [req.params.username], function (err, rows, fields) {
@@ -218,7 +299,7 @@ app.put("/usercars/update", (req, res) => {
             throw err
         }
         else {
-            return res.json('Insert succesful');
+            return res.json('Update succesful');
         }
     })
 });
