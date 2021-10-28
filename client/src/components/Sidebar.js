@@ -1,15 +1,18 @@
-import React, {useState} from 'react'
+import React, {useState} from 'react';
 import * as FaIcons from "react-icons/fa";
 import * as AiIcons from "react-icons/ai";
 import { Link } from 'react-router-dom';
 import { SidebarData } from './Sidebardata';
 import './Sidebar.css';
-import { IconContext } from 'react-icons'
+import { IconContext } from 'react-icons';
+import onClickOutside from "react-onclickoutside";
 
 function Sidebar() {
     const [sidebar, setSidebar] = useState(false)
 
     const showSidebar = () => setSidebar(!sidebar)
+
+    Sidebar.handleClickOutside = () => setSidebar(false);
 
     return (
         <>
@@ -49,4 +52,8 @@ function Sidebar() {
     )
 }
 
-export default Sidebar
+const clickOutsideConfig = {
+    handleClickOutside: () => Sidebar.handleClickOutside
+};
+
+export default onClickOutside(Sidebar, clickOutsideConfig);
