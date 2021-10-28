@@ -33,6 +33,9 @@ export const SidebarData = [
         title: 'New Trip',
         path: '/newtrip',
         icon: <BiIcons.BiTrip />,
+        title: 'Map',
+        path: '/maps',
+        icon: <AiIcons.AiFillCar />,
         cName: 'side-text'
     }
 ]
