@@ -16,6 +16,7 @@ const Home = () => {
   const [color, setColor] = useState("black")
   const [c_fuel, setCFuel] = useState("0")
   const [confirm, setConfirm] = useState(false);
+  const [validInput, setValidInput] = useState(false);
 
   useEffect(() => {
     Axios.get(addr).then((response) => 
@@ -24,6 +25,10 @@ const Home = () => {
     });
   }, []);
 
+  useEffect(() => {
+    validateInput(a)
+  }, [a]);
+
   function submitFuel(){
     Axios.put("http://localhost:5000/usercars/update", {
       username: userName,
@@ -31,7 +36,7 @@ const Home = () => {
       color: color,
       current_fuel: c_fuel
     }).then(() => {
-      console.log("Successful insert");
+      console.log("Successful insert to usercars");
     });
   };
 
@@ -39,10 +44,19 @@ const Home = () => {
     window.location.reload(false);
   }
 
+  function validateInput(input) {
+    setValidInput(input < 100 && input.length > 0);
+  }
+
   function fillFuel(input){
-    setFuel(input)
-    setCFuel(input)
-    submitFuel()
+    if(validInput) {
+      setFuel(input)
+      setCFuel(input)
+      setConfirm(true);
+    }
+    else {
+      alert("Invalid Input: " + input + " please enter a value less than 100");
+    }
   }
 
   return (
@@ -51,7 +65,7 @@ const Home = () => {
       <br></br>
       <GaugeChart className="gauge"
         nrOfLevels={10}
-        colors={["red", "black"]}
+        colors={["red", "green"]}
         arcWidth={0.3}
         percent={c / 100}
         textColor='#730000'
@@ -67,10 +81,13 @@ const Home = () => {
           value={a}
           label="Your Current Fuel %"
           onChange={(e) => {
-            setVal(e.target.value);
-          } } />
+            let input = e.target.value ;
+            if( !input || ( input[input.length-1].match('[0-9]') && input[0].match('[1-9]'))) {
+              setVal(input)
+            }     
+          }}/>
       </div>
-      <button className="confirmBtn" style={{ height: 40, width: 200 }} onClick={() => { fillFuel(a); setConfirm(true); } }>Confirm</button>
+      <button className="confirmBtn" style={{ height: 40, width: 200 }} onClick={() => {validateInput(a); fillFuel(a); } }>Confirm</button>
     </div><button className="fillUpbtn" style={{ height: 40, width: 200 }} onClick={() => { fillFuel(100); setConfirm(true); }}>Fill Up</button>
 
     </><Popup trigger={confirm} setTrigger={setConfirm}>
