@@ -79,10 +79,13 @@ function NewTrip() {
                 } } />
         
         </div>
-        
+            
+            <button className="preBtn" style={{ height: 50, width: 200 }} onClick={() => {} }>Preview</button>
+            <br></br>
             <button className="newBtn" style={{ height: 50, width: 200 }} onClick={() => {calcDistance(); newTrip()} }>Add New Trip</button>
             <h3>start: {start}</h3>
             <h4>destination: {dest}</h4>
+            
         </>
         
     )

@@ -6,6 +6,12 @@
 
 .newBtn {
     font-family: monospace;
+    margin-top: 2%;
+    margin-left: 30%;
+}
+
+.preBtn {
+    font-family: monospace;
     margin-top: 10%;
     margin-left: 30%;
 }
