@@ -7,6 +7,7 @@ import TripHistory from './pages/triphistory';
 import Reports from './pages/gasefficiencyreports';
 import UserProfile from './pages/userprofile';
 import NewTrip from './pages/newtrip';
+import MyMap from './pages/maps';
 
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
         <Route path = '/gasefficiencyreports' component={Reports}/>
         <Route path = '/userprofile' component={UserProfile}/>
         <Route path = '/newtrip' component={NewTrip}/>
+        <Route path = '/maps' component ={MyMap}/>
       </Switch>
     </Router>
   );
