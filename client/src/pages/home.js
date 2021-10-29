@@ -45,7 +45,7 @@ const Home = () => {
   }
 
   function validateInput(input) {
-    setValidInput(input <= 100 && input.length > 0);
+    setValidInput(input < 101);
   }
 
   function fillFuel(input){
@@ -88,7 +88,7 @@ const Home = () => {
           }}/>
       </div>
       <button className="confirmBtn" style={{ height: 40, width: 200 }} onClick={() => {validateInput(a); fillFuel(a); } }>Confirm</button>
-    </div><button className="fillUpbtn" style={{ height: 40, width: 200 }} onClick={() => { fillFuel(100); setConfirm(true); }}>Fill Up</button>
+    </div><button className="fillUpbtn" style={{ height: 40, width: 200 }} onClick={() => {setVal("100"); validateInput(a); fillFuel(100);}}>Fill Up</button>
 
     </><Popup trigger={confirm} setTrigger={setConfirm}>
         <h3> Save changes?</h3>
