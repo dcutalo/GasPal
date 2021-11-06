@@ -1,3 +1,5 @@
+@import url(https://fonts.googleapis.com/css2?family=Gluten&display=swap);
+
 .userp{
     display: flex;
     align-items: center;
@@ -11,4 +13,10 @@
 
 .profiletext {
     padding-bottom: 20%;
+}
+
+.confirmBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
