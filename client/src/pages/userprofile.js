@@ -2,14 +2,36 @@ import Popup from './userprofile/Popup'
 import React, {useState, useEffect} from 'react';
 import '../style/userprofile.css';
 import Axios from 'axios';
+import AsyncSelect from 'react-select/async';
 const name = "coolguy05"
 
 function UserProfile() {
+const [addCar, setAddCar] = useState(false);
 const [emailButton, setEmailButton] = useState(false);
-const [userNameBtn, setUserNameBtn] = useState("");
+const [userNameBtn, setUserNameBtn] = useState(false);
 const [changePass, setChangePass] = useState(false);
 const [Logout, setLogout] = useState(false);
 const [DeleteProfile, setDeleteProfile] = useState(false);
+//dropdown
+const [inputCar, setCar] = useState('');
+const [selectedCar, setSelectedCar] = useState(null);
+
+// handle input change event
+const handleInputChange = value => {
+  setCar(value);
+};
+
+// handle selection
+const handleChange = value => {
+  setSelectedCar(value);
+}
+
+const fetchData = () => {
+  return  Axios.get('http://localhost:5000/cars').then(result => {
+    const res =  result.data;
+    return res;
+  });
+}
 
 const [userName, setUsername] = useState([])
 useEffect(() => {
@@ -24,19 +46,24 @@ useEffect(() => {
     
     <div className="userp">
      <main className="btns">
-     <h1 className="profiletext">User Profile</h1>
+      <div>
      {userName.map((val) => {
         if (val.username === name){
             return (    
                 <>
-                <h2>{val.username}</h2><br></br>
+                <h2>{val.username}</h2>
+                <br></br>
+                <br></br>
                 <h3>{val.email}</h3>
                 </>
             )}  
         }           
       )}
-
-      
+    </div>
+    <br></br>
+       <button style={{ fontWeight: 'bold', height:30, width: 200}} onClick={() => setAddCar(true)}>Add Car</button>     
+       <br></br>
+       <br></br>
        <button style={{ fontWeight: 'bold', height:30, width: 200}} onClick={() => setEmailButton(true)}>Update Email</button>
        <br></br>
        <br></br>
@@ -53,6 +80,57 @@ useEffect(() => {
        <button style={{ fontWeight: 'bold', height:30, width: 200}} onClick={() => setLogout(true)}>Logout</button> 
      </main>
 
+     <Popup trigger={addCar} setTrigger={setAddCar}>
+     <div>Selected Value: {JSON.stringify(selectedCar || {}, null, 2)}</div>
+     <div>
+        <pre>Select Make:</pre>
+        <AsyncSelect
+        cacheOptions
+        defaultOptions
+        value={selectedCar}
+        getOptionValue={e => e.car_id}
+        getOptionLabel={e => e.make}
+        loadOptions={fetchData}
+        onInputChange={handleInputChange}
+        onChange={handleChange}
+      />
+      </div>
+      <br></br>
+      <br></br>
+      <div>
+        <pre>Select Model:</pre>
+        <AsyncSelect
+        cacheOptions
+        defaultOptions
+        value={selectedCar}
+        getOptionValue={e => e.car_id}
+        getOptionLabel={e => e.model}
+        loadOptions={fetchData}
+        onInputChange={handleInputChange}
+        onChange={handleChange}
+      />
+      </div>
+      <br></br>
+      <br></br>
+      <div>
+        <pre>Select Year:</pre>
+        <AsyncSelect
+        cacheOptions
+        defaultOptions
+        value={selectedCar}
+        getOptionValue={e => e.car_id}
+        getOptionLabel={e => e.year}
+        loadOptions={fetchData}
+        onInputChange={handleInputChange}
+        onChange={handleChange}
+      />
+      </div>
+      <br></br>
+      <br></br>
+      <div>
+      <button className = "confirmBtn" style={{fontSize: '18px', height:30, width: 200}} > Confirm</button> 
+      </div>
+       </Popup>
      <Popup trigger={emailButton} setTrigger={setEmailButton}>
         <form action="text">
           Enter your new email address:
