@@ -40,5 +40,11 @@ export const SidebarData = [
         path: '/maps',
         icon: <AiIcons.AiFillCar />,
         cName: 'side-text'
+    },
+    {
+        title: 'Login',
+        path: '/login',
+        icon: <AiIcons.AiFillBook />,
+        cName: 'side-text'
     }
 ]
