@@ -6,6 +6,9 @@ import AsyncSelect from 'react-select/async';
 import { useAuth0 } from "@auth0/auth0-react";
 import { SliderPicker } from 'react-color'
 const name = "uncoolguy05"
+import Profile from '../components/profile.js';
+import {Redirect} from 'react-router-dom';
+const name = "coolguy05"
 
 function UserProfile() {
 const [userName, setUsername] = useState([])
