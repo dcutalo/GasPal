@@ -262,12 +262,28 @@ app.get('/cars', (req, res) => {
 
 //user_owned_car (needs delete)
 app.get('/usercars/:username', (req, res) => {
-    const queryString = "SELECT * from user_owned_car WHERE username = ?"
+    const queryString = "SELECT * from user_owned_car WHERE username = ? LIMIT 1"
     connection.query(queryString, [req.params.username], function (err, rows, fields) {
 
         if (err) throw err
 
         return res.json(rows);
+    })
+});
+
+app.delete('/usercars/delete', (req, res) => {
+    const username = req.body.username
+    const car_id = req.body.car_id
+    const queryString = "DELETE FROM user_owned_car WHERE username = ? AND car_id = ?"
+    connection.query(queryString, [username, car_id], function (err, rows, fields) {
+        if (err) {
+            console.log("screams")
+            throw err
+        }
+        else {
+            console.log("screams x2")
+            return res.json('Succesfully removed car from user');
+        }
     })
 });
 
@@ -296,6 +312,7 @@ app.put("/usercars/update", (req, res) => {
     const current_fuel = req.body.current_fuel
     const queryString = `UPDATE user_owned_car SET current_fuel = ${current_fuel} WHERE username = "${username}" and car_id = ${car_id} and color = "${color}";`
 
+    console.log(req.body);
     connection.query(queryString, function (err, rows, fields) {
         if (err) {
             throw err

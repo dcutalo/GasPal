@@ -8,7 +8,12 @@ import Reports from './pages/gasefficiencyreports';
 import UserProfile from './pages/userprofile';
 import NewTrip from './pages/newtrip';
 import Login from './pages/login';
+import {withAuthenticationRequired } from '@auth0/auth0-react';
+import { createBrowserHistory } from 'history'
 
+const ProtectedRoute = ({ component, ...args }) => (
+  <Route component={withAuthenticationRequired(component)} {...args} />
+);
 
 
 function App() {
@@ -16,13 +21,14 @@ function App() {
     <Router>
       <Sidebar />
       <Switch>
-        <Route path = '/' exact component={Home}/>
+        <ProtectedRoute path = '/' exact component={Home}/>
         <Route path = '/login' component={Login}/>
-        <Route path = '/triphistory' component={TripHistory}/>
-        <Route path = '/gasefficiencyreports' component={Reports}/>
-        <Route path = '/userprofile' component={UserProfile}/>
-        <Route path = '/newtrip' component={NewTrip}/>
         <Route exact path="/map" render={() => {window.location.href="map.html"}} />
+        <ProtectedRoute path = '/triphistory' component={TripHistory}/>
+        <ProtectedRoute path = '/gasefficiencyreports' component={Reports}/>
+        <ProtectedRoute path = '/userprofile' component={UserProfile}/>
+        <ProtectedRoute path = '/newtrip' component={NewTrip}/>
+        
       </Switch>
     </Router>
   );

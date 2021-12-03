@@ -5,9 +5,13 @@ import Axios from 'axios';
 import AsyncSelect from 'react-select/async';
 import { useAuth0 } from "@auth0/auth0-react";
 import { SliderPicker } from 'react-color'
-const name = "uncoolguy05"
+import Profile from '../components/profile.js';
+import {Redirect} from 'react-router-dom';
 
 function UserProfile() {
+const { user, isAuthenticated, isLoading } = useAuth0();
+var userAddr = "http://localhost:5000/usercars/" + user.nickname;
+
 const [userName, setUsername] = useState([])
 const [addCar, setAddCar] = useState(false);
 const [deleteCar, setDeleteCar] = useState(false);
@@ -28,7 +32,7 @@ const [visible2, setVisible2] = React.useState(false);
 const [visible3, setVisible3] = React.useState(false);
 const [inputCar, setCar] = useState('');
 const [selectedCar, setSelectedCar] = useState(null);
-const { user, isAuthenticated, isLoading } = useAuth0();
+
 console.log("isAuth: ", isAuthenticated)
 console.log("user: ", user)
 console.log("isLoading: " + isLoading)
@@ -39,6 +43,10 @@ let honda = 'Honda'
 // handle input change event
 const handleInputChange = value => {
   setCar(value);
+};
+
+const handleDeleteChange = value => {
+  setDeleteC(value);
 };
 
 // handle selection
@@ -67,9 +75,9 @@ const handleChange4 = value => {
 }
 
 function handleDelete(){
-  Axios.post("http://localhost:5000/usercars/delete", {
-        username: name,
-        car_id: deleteC.car_id
+  Axios.delete("http://localhost:5000/usercars/delete", {
+        username: user.nickname,
+        car_id: deleteC
   }).then(() => {
   console.log("Successful car insert");
   });
@@ -83,7 +91,7 @@ const fetchData = () => {
 }
 
 const fetchCars = () => {
-  return  Axios.get('http://localhost:5000/usercars/' + name
+  return  Axios.get(userAddr
     ).then(result => {
     const res =  result.data;
     return res;
@@ -107,7 +115,7 @@ function check(value){
 
 function newCar(){
     Axios.post("http://localhost:5000/usercars/insert", {
-          username: name,
+          username: user.nickname,
           car_id: selectedCar.car_id,
           color: color,
           current_fuel: 100
@@ -119,7 +127,7 @@ function newCar(){
 
 
 useEffect(() => {
-  Axios.get('http://localhost:5000/usercars/' + name).then((response) => 
+  Axios.get('http://localhost:5000/usercars/' + user.nickname).then((response) => 
   {
       setMyCars(response.data);
   });
@@ -147,7 +155,7 @@ if(isLoading) {
       <main className="btns">
         <div>
       {userName.map((val) => {
-          if (val.username === name){
+          if (val.username === user.nickname){
               return (    
                   <>
                   <img src={user.picture} alt="user's picture"/>
@@ -205,7 +213,7 @@ if(isLoading) {
         <AsyncSelect cacheOptions defaultOptions value={deleteC}
         getOptionValue={e => e.car_id}
         getOptionLabel={e => e.car_id}
-        loadOptions={fetchCars} onInputChange={handleInputChange} onChange={handleChange4}/>
+        loadOptions={fetchCars} onInputChange={handleDeleteChange} onChange={handleChange4}/>
       </div>
       <button className = "confirmBtn" style={{fontSize: '18px', height:30, width: 200}} onClick={() => {handleDelete();setDeleteCar(false);refreshPage()}} > Confirm</button> 
       </Popup>
