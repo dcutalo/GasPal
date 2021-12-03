@@ -6,8 +6,8 @@ import App from './App';
 
 ReactDOM.render(
   <Auth0Provider
-  domain="kotek.us.auth0.com"
-  clientId="21TU9wrQYd2wMOSJR55sAjlDSgxuos2f"
+  domain="gaspal.us.auth0.com"
+  clientId="tHBR6TAsrYZF90PCuF7YrAlJRbNlMBG4"
   redirectUri= {window.location.origin}
   >
   <App />

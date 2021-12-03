@@ -22,12 +22,12 @@ function App() {
       <Sidebar />
       <Switch>
         <ProtectedRoute path = '/' exact component={Home}/>
-        <ProtectedRoute exact path="/map" render={() => {window.location.href="map.html"}} />
+        <Route path = '/login' component={Login}/>
+        <Route exact path="/map" render={() => {window.location.href="map.html"}} />
         <ProtectedRoute path = '/triphistory' component={TripHistory}/>
         <ProtectedRoute path = '/gasefficiencyreports' component={Reports}/>
         <ProtectedRoute path = '/userprofile' component={UserProfile}/>
         <ProtectedRoute path = '/newtrip' component={NewTrip}/>
-        <ProtectedRoute path = '/maps' component={MyMap}/>
         
       </Switch>
     </Router>
