@@ -2,33 +2,44 @@ import React, {useState, useEffect} from 'react';
 import TextField from "@material-ui/core/TextField";
 import Axios from 'axios';
 import '../style/newtrip.css';
+import { useAuth0 } from "@auth0/auth0-react";
 
 function NewTrip() {
-    const name = "uncoolguy01"
-    const car = 2;
-    const userCarEndpoint = "http://localhost:5000/usercars/" + name
-    const carEndpoint = "http://localhost:5000/cars/" + car
+    const { user } = useAuth0();
+    const userCarEndpoint = "http://localhost:5000/usercars/" + user.nickname
+    
     const [start, setStart] = useState("");
     const [dest, setDest] = useState("");
     const [fuel, setFuel] = useState([]);
     const [fuel_cap, setFuelCap] = useState(0);
     const [carMPG, setCarMPG] = useState(0);
-    const [carId, setCarId] = useState(car);
+    const [carId, setCarId] = useState(-1);
     const [distance, setDistance] = useState(25);
-    const [userName, setUsername] = useState(name);
+    const [userName, setUsername] = useState(user.nickname);
 
     useEffect(() => {
         Axios.get(userCarEndpoint).then((response) => 
         {
           setFuel(response.data.map(item=>item.current_fuel));
-        });
-
-        Axios.get(carEndpoint).then((response) => 
-        {
-          setFuelCap(response.data.map(carro=>carro.tank_max));
-          setCarMPG(response.data.map(carro=>carro.mpg));
+          console.log("changing endpoint to: " + "http://localhost:5000/cars/" + response.data.map(item=>item.car_id))
+          setCarId(response.data.map(item=>item.car_id));
         });
     }, []);
+
+    useEffect(() => {
+        var carEndpoint = "http://localhost:5000/cars/" + carId;
+        if(carEndpoint !== null) {
+            console.log("trying the carEndpoint");
+            Axios.get(carEndpoint).then((response) => 
+            {
+            setFuelCap(response.data.map(carro=>carro.tank_max));
+            setCarMPG(response.data.map(carro=>carro.mpg));
+            });
+        }
+        else {
+            console.log("carEnpoint is: " + carEndpoint + "!")
+        }
+    }, [carId]);
 
     function newTrip(){
         if(distance < (((fuel / 100) * fuel_cap ) * carMPG)) {

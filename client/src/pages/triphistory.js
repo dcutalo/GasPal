@@ -1,17 +1,19 @@
 import React, {useState, useEffect} from 'react';
 import '../style/triphistory.css';
 import Axios from 'axios';
-const name = "coolguy04"
+import { useAuth0 } from "@auth0/auth0-react";
 
 function TripHistory() {
 
     // const [itemname, methodcall] = useState(itemtype)
-    const [tripList, setTripList] = useState([])
-    const [car, setCar] = useState([])
+    const [tripList, setTripList] = useState([]);
+    const [car, setCar] = useState([]);
+    const { user } = useAuth0();
+    const userAddr = "http://localhost:5000/trips/" + user.nickname;
     
     // use AXIOS to communicate with backend
     useEffect(() => {
-        Axios.get("http://localhost:5000/trips").then((response) => 
+        Axios.get(userAddr).then((response) => 
         {
             setTripList(response.data);
         });
