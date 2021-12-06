@@ -262,7 +262,7 @@ app.get('/cars', (req, res) => {
 
 //user_owned_car (needs delete)
 app.get('/usercars/:username', (req, res) => {
-    const queryString = "SELECT * from user_owned_car WHERE username = ? LIMIT 1"
+    const queryString = "SELECT * from user_owned_car WHERE username = ?"
     connection.query(queryString, [req.params.username], function (err, rows, fields) {
 
         if (err) throw err
@@ -271,7 +271,7 @@ app.get('/usercars/:username', (req, res) => {
     })
 });
 
-app.delete('/usercars/delete', (req, res) => {
+app.delete('/usercars/delete/', (req, res) => {
     const username = req.body.username
     const car_id = req.body.car_id
     const queryString = "DELETE FROM user_owned_car WHERE username = ? AND car_id = ?"

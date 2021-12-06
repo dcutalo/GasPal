@@ -12,22 +12,44 @@ const Home = () => {
 
   const [a, setVal] = useState("");
   const [c, setFuel] = useState([]);
+  const [cars, setCars] = useState([]);
+  const [curr, setCurr] = useState(0);
   const [userName, setUsername] = useState(user.nickname)
-  const [userCarID, setUserCarID] = useState("1")
-  const [color, setColor] = useState("black")
-  const [c_fuel, setCFuel] = useState("0")
+  const [userCarID, setUserCarID] = useState(0)
+  const [color, setColor] = useState("")
+  const [c_fuel, setCFuel] = useState(0)
   const [confirm, setConfirm] = useState(false);
   const [validInput, setValidInput] = useState(false);
-
+  const [fuels, setFuels] = useState([]);
+  const [ids, setIDs] = useState([])
+  const [colors, setColors] = useState("")
   useEffect(() => {
       console.log("made it to this step: set fuel")
       Axios.get(userAddr).then((response) => 
       {
-        setFuel(response.data.map(item=>item.current_fuel));
-        setUserCarID(response.data.map(resp=>resp.car_id));
-        setColor(response.data.map(resp=>resp.color));
+        setCars(response.data.map(car=>car));
+        setFuels(response.data.map(item=>item.current_fuel));
+        setIDs(response.data.map(resp=>resp.car_id));
+        setColors(response.data.map(resp=>resp.color));
       });
   }, []);
+
+  function switchCar(){
+    if((curr+1) >= cars.length){
+      setCurr(0)
+    }
+    else{
+      setCurr(curr + 1)
+    }
+    setFuel(fuels[curr])
+    setUserCarID(ids[curr])
+    setColor(colors[curr])
+  }
+  useEffect(() => {
+    setFuel(fuels[0])
+    setUserCarID(ids[0])
+    setColor(colors[0])
+  }, [cars]);
 
   useEffect(() => {
     validateInput(a)
@@ -78,7 +100,7 @@ const Home = () => {
           animDelay={200} />
         <br></br>
         <br></br>
-
+        <h2 className="gastext">Current Car ID: {userCarID}</h2>
         <h2 className="gastext">Enter Current Fuel:</h2>
         <div className="gasvalue">
           <TextField
@@ -93,7 +115,8 @@ const Home = () => {
         </div>
         <button className="confirmBtn" style={{ height: 40, width: 200 }} onClick={() => {validateInput(a); fillFuel(a); } }>Confirm</button>
       </div><button className="fillUpbtn" style={{ height: 40, width: 200 }} onClick={() => {setVal("100"); validateInput(a); fillFuel(100);}}>Fill Up</button>
-
+      <button style={{ fontWeight: 'bold', position: "absolute", bottom: 10, right: 10, height:30, width:100}} onClick={() => switchCar()}> 
+                  Switch Car</button> 
       </><Popup trigger={confirm} setTrigger={setConfirm}>
           <h3> Save changes?</h3>
           <button className="confirmBtn" style={{ height: 40, width: 200 }} onClick={() => { submitFuel(); setConfirm(false); } }>Confirm</button>
