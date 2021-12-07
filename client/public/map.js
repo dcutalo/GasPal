@@ -92,5 +92,5 @@ function MyMap() {
 
     
 }
-
+}
 export default MyMap;

@@ -44,3 +44,17 @@
   margin-left: 30%;
   margin-top: 2em;
 }
+
+.login {
+  padding-top: 5%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loginBtns {
+  padding-top: 3%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

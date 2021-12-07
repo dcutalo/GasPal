@@ -5,7 +5,14 @@ import LogoutButton from '../components/logoutButton.js'
 
 function Login() {
     return (
-        <><div><h1>"Login Page"</h1></div><LoginButton/><LogoutButton/></>
+        <><div className = "login"><h1>Login to GasPal</h1></div>
+        <div className = "loginBtns">
+        <LoginButton/>
+        </div>
+        <div className = "loginBtns">
+        <LogoutButton/>
+        </div>
+        </>
         );
 }
 
