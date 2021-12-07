@@ -262,7 +262,7 @@ app.get('/cars', (req, res) => {
 
 //user_owned_car (needs delete)
 app.get('/usercars/:username', (req, res) => {
-    const queryString = "SELECT * from user_owned_car WHERE username = ?"
+    const queryString = "SELECT * from user_owned_car WHERE username = ? LIMIT 1"
     connection.query(queryString, [req.params.username], function (err, rows, fields) {
 
         if (err) throw err
@@ -277,11 +277,9 @@ app.delete('/usercars/delete/', (req, res) => {
     const queryString = "DELETE FROM user_owned_car WHERE username = ? AND car_id = ?"
     connection.query(queryString, [username, car_id], function (err, rows, fields) {
         if (err) {
-            console.log("screams")
             throw err
         }
         else {
-            console.log("screams x2")
             return res.json('Succesfully removed car from user');
         }
     })
@@ -330,6 +328,33 @@ app.get('/usercars', (req, res) => {
         if (err) throw err
 
         return res.json(rows);
+    })
+});
+
+app.get('/usercarsDefaultCar/:username', (req, res) => {
+    const queryString = "Select * from user_owned_car WHERE username = ? AND default_car='true'"  
+    connection.query(queryString, [req.params.username], function (err, rows, fields) {
+
+        if (err) throw err
+
+        return res.json(rows);
+    })
+});
+
+app.get('/usercarsDefaultCar/update', (req, res) => {
+    const username = req.body.username
+    const car_id = req.body.car_id
+    const queryString = `UPDATE user_owned_car SET default_car = false WHERE username = "${username}";
+                         UPDATE user_owned_car SET default_car = true WHERE username = "${username}" AND car_id = ${car_id};`
+
+    console.log(req.body);
+    connection.query(queryString, function (err, rows, fields) {
+        if (err) {
+            throw err
+        }
+        else {
+            return res.json('Update succesful');
+        }
     })
 });
 //end
