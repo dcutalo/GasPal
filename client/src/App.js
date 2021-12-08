@@ -25,7 +25,6 @@ function App() {
         <ProtectedRoute path = '/' exact component={Home}/>
         <Route path = '/login' component={Login}/>
         <Route exact path="/map" render={() => {window.location.href="map.html"}} />
-        <Route path = '/freshMaps' component={Maps}/>
         <ProtectedRoute path = '/triphistory' component={TripHistory}/>
         <ProtectedRoute path = '/gasefficiencyreports' component={Reports}/>
         <ProtectedRoute path = '/userprofile' component={UserProfile}/>

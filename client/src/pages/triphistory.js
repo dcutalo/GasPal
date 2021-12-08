@@ -9,7 +9,7 @@ function TripHistory() {
     // const [itemname, methodcall] = useState(itemtype)
     const [tripList, setTripList] = useState([]);
     const [car, setCar] = useState([]);
-    const [tripToDelete, setTripToDelete] = useState([0]);
+    const [tripToDelete, setTripToDelete] = useState(0);
     const [confirm, setConfirm] = useState(false);
     const { user } = useAuth0();
     const userAddr = "http://localhost:5000/trips/" + user.nickname;
@@ -31,10 +31,14 @@ function TripHistory() {
     
     function deleteTrip() {
         Axios.delete("http://localhost:5000/trips/delete", {
-                trip_id: tripToDelete
+                data:{
+                    trip_id: tripToDelete
+                }
         }).then(() => {
             console.log("Successful deletion from trips");
         });
+
+        window.location.reload(false);
     }
     
     return (
@@ -50,7 +54,7 @@ function TripHistory() {
                             Starting Address: {val.start_adr} <br></br>
                             Destination Address: {val.end_adr}<br></br>
                             Distance: {val.distance} miles
-                        </h2><button value={val.trip_id} style={{ height: 40, width: 200 }} /*onClick={() => { setConfirm(true); this.setTripToDelete(val.trip_id); } }*/>Delete</button></>
+                        </h2><button style={{ height: 40, width: 200 }} onClick={() => { setConfirm(true); setTripToDelete(val.trip_id); } }>Delete</button></>
                     );
                 }
             })

@@ -45,13 +45,12 @@ app.post("/trips/insert", (req, res) => {
 app.delete('/trips/delete', (req, res) => {
     const trip_id = req.body.trip_id
     const queryString = "DELETE FROM trip WHERE trip_id = ?"
-    console.log('got to delete trip - trip_id coming in: ' + trip_id)
+
     connection.query(queryString, [trip_id], function (err, rows, fields) {
         if (err) {
             throw err
         }
         else {
-            console.log('Succesfully removed trip')
             return res.json('Succesfully removed trip');
         }
     })
