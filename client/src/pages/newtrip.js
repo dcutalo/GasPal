@@ -7,10 +7,11 @@ import Autocomplete from "react-google-autocomplete";
 import { withScriptjs, withGoogleMap, GoogleMap } from 'react-google-maps';
 import DistanceMatrixService from 'react-google-maps';
 import { compose, withProps, lifecycle} from "recompose";
+import Popup from './userprofile/Popup'
 
 function NewTrip() {
     const { user } = useAuth0();
-    const userCarEndpoint = "http://localhost:5000/usercars/" + user.nickname
+    const userCarEndpoint = "http://localhost:5000/usercarsDefaultCar/" + user.nickname
     
     const [start, setStart] = useState("");
     const [dest, setDest] = useState("");
@@ -23,7 +24,8 @@ function NewTrip() {
     const [userName, setUsername] = useState(user.nickname);
     const [startPlaceId, setStartPlaceId] = useState(0);
     const [destPlaceId, setDestPlaceId] = useState(0);
-    
+    const [confirm, setConfirm] = useState(false);
+
     var distanceNode = require('distance-matrix-api');
     var origins = ["place_id:" + startPlaceId];
     var destinations = ["place_id:" + destPlaceId];
@@ -31,8 +33,10 @@ function NewTrip() {
     useEffect(() => {
         Axios.get(userCarEndpoint).then((response) => 
         {
+            console.log(response)
           setFuel(response.data.map(item=>item.current_fuel));
           setCarId(response.data.map(item=>item.car_id));
+          setCarColor(response.data.map(item=>item.color));
         });
     }, []);
 
@@ -70,7 +74,7 @@ function NewTrip() {
                 username: userName,
                 car_id: carId,
                 color: carColor,
-                current_fuel: fuel - (distance / carMPG)
+                current_fuel: 100 */*Decimal value of gas left in tank ->*/ ((((fuel / 100) * fuel_cap) /*<- current gas in gallons*/ - ( distance / carMPG ) /*<- cost of trip in gallons*/ ) / fuel_cap)
             });
         }
         else {
@@ -135,6 +139,7 @@ function NewTrip() {
                 console.log(typeof(num))
                console.log((distances.rows[0].elements[0].distance.value * 1.0) / 1609.34)
                setDistance(distances.rows[0].elements[0].distance.value / 1609.34)
+               setConfirm(true)
                console.log(distance)
             }
             else {
@@ -185,9 +190,16 @@ function NewTrip() {
             
             <button className="preBtn" style={{ height: 50, width: 200 }} onClick={() => {} }>Preview</button>
             <br></br>
-            <button className="newBtn" style={{ height: 50, width: 200 }} onClick={() => {calcDistance(); distanceCalculate(); newTrip()} }>Add New Trip</button>
-            <h3>start: {start}</h3>
-            <h4>destination: {dest}</h4>
+            <button className="newBtn" style={{ height: 50, width: 200 }} onClick={() => { distanceCalculate(); } }>Add New Trip</button>
+            <br></br>
+            <h3>You are currently driving:</h3>
+
+            <Popup trigger={confirm} setTrigger={setDistance}>
+                <h3> Are you sure you want to go on this trip?</h3>
+                <button className="confirmBtn" style={{ height: 40, width: 200 }} onClick={() => { newTrip(); setConfirm(false)} }>Confirm</button>
+                <button className="undoBtn" style={{ height: 40, width: 200 }} onClick={() => { } }>Undo</button>
+          
+            </Popup>
             
         </>
         

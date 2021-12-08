@@ -45,11 +45,13 @@ app.post("/trips/insert", (req, res) => {
 app.delete('/trips/delete', (req, res) => {
     const trip_id = req.body.trip_id
     const queryString = "DELETE FROM trip WHERE trip_id = ?"
+    console.log('got to delete trip - trip_id coming in: ' + trip_id)
     connection.query(queryString, [trip_id], function (err, rows, fields) {
         if (err) {
             throw err
         }
         else {
+            console.log('Succesfully removed trip')
             return res.json('Succesfully removed trip');
         }
     })
@@ -262,7 +264,7 @@ app.get('/cars', (req, res) => {
 
 //user_owned_car (needs delete)
 app.get('/usercars/:username', (req, res) => {
-    const queryString = "SELECT * from user_owned_car WHERE username = ? LIMIT 1"
+    const queryString = "SELECT * from user_owned_car WHERE username = ?"
     connection.query(queryString, [req.params.username], function (err, rows, fields) {
 
         if (err) throw err
@@ -332,7 +334,7 @@ app.get('/usercars', (req, res) => {
 });
 
 app.get('/usercarsDefaultCar/:username', (req, res) => {
-    const queryString = "Select * from user_owned_car WHERE username = ? AND default_car='true'"  
+    const queryString = "Select * from user_owned_car WHERE username = ? AND default_car=true"  
     connection.query(queryString, [req.params.username], function (err, rows, fields) {
 
         if (err) throw err
