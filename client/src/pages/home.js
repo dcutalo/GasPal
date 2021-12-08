@@ -5,6 +5,7 @@ import GaugeChart from 'react-gauge-chart'
 import Axios from 'axios';
 import Popup from './userprofile/Popup'
 import { useAuth0 } from "@auth0/auth0-react";
+import Select from 'react-select';
 
 const Home = () => {
   const { user, isAuthenticated, isLoading } = useAuth0();
@@ -20,21 +21,44 @@ const Home = () => {
   const [c_fuel, setCFuel] = useState(0)
   const [confirm, setConfirm] = useState(false);
   const [validInput, setValidInput] = useState(false);
+  /*
   const [fuels, setFuels] = useState([]);
   const [ids, setIDs] = useState([])
   const [colors, setColors] = useState("")
+  const [sw, setSw] = useState(0)
+  */
   useEffect(() => {
       console.log("made it to this step: set fuel")
       Axios.get(userAddr).then((response) => 
+      {
+        setCars(response.data.map(car=>car));
+        /*
+        setFuels(response.data.map(item=>item.current_fuel));
+        setIDs(response.data.map(resp=>resp.car_id));
+        setColors(response.data.map(resp=>resp.color));
+        */
+      });
+  }, []);
+/*
+  function switchCar(){
+    if(sw === 0)
+    {
+      setSw(1)
+    }
+    if (sw === 1)
+    {
+      setSw(0)
+    }
+  }
+
+  useEffect(() => {
+    Axios.get(userAddr).then((response) => 
       {
         setCars(response.data.map(car=>car));
         setFuels(response.data.map(item=>item.current_fuel));
         setIDs(response.data.map(resp=>resp.car_id));
         setColors(response.data.map(resp=>resp.color));
       });
-  }, []);
-
-  function switchCar(){
     if((curr+1) >= cars.length){
       setCurr(0)
     }
@@ -44,12 +68,8 @@ const Home = () => {
     setFuel(fuels[curr])
     setUserCarID(ids[curr])
     setColor(colors[curr])
-  }
-  useEffect(() => {
-    setFuel(fuels[0])
-    setUserCarID(ids[0])
-    setColor(colors[0])
-  }, [cars]);
+  }, [sw]);
+*/
 
   useEffect(() => {
     validateInput(a)
@@ -85,6 +105,9 @@ const Home = () => {
     }
   }
 
+  function dosomething(){
+
+  }
     return (
       <><><div>
         <br></br>
@@ -112,15 +135,21 @@ const Home = () => {
                 setVal(input)
               }     
             }}/>
+      <div className="selectCar">
+      <pre>Select Car:</pre>
+      <Select options={cars}
+        getOptionValue={e => e.car_id}
+        getOptionLabel={e => e.car_id}
+        onChange={dosomething}
+      />
+      </div>
         </div>
         <button className="confirmBtn" style={{ height: 40, width: 200 }} onClick={() => {validateInput(a); fillFuel(a); } }>Confirm</button>
       </div><button className="fillUpbtn" style={{ height: 40, width: 200 }} onClick={() => {setVal("100"); validateInput(a); fillFuel(100);}}>Fill Up</button>
-      <button style={{ fontWeight: 'bold', position: "absolute", bottom: 10, right: 10, height:30, width:100}} onClick={() => switchCar()}> 
-                  Switch Car</button> 
       </><Popup trigger={confirm} setTrigger={setConfirm}>
           <h3> Save changes?</h3>
           <button className="confirmBtn" style={{ height: 40, width: 200 }} onClick={() => { submitFuel(); setConfirm(false); } }>Confirm</button>
-          <button className="undoBtn" style={{ height: 40, width: 200 }} onClick={() => {  setConfirm(false); refreshPage();} }>Undo</button>
+          <button className="confirmBtn" style={{ height: 40, width: 200 }} onClick={() => {  setConfirm(false); refreshPage();} }>Undo</button>
           
       </Popup></>
       
