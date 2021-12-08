@@ -10,6 +10,7 @@ import NewTrip from './pages/newtrip';
 import Login from './pages/login';
 import {withAuthenticationRequired } from '@auth0/auth0-react';
 import { createBrowserHistory } from 'history'
+import Maps from './pages/freshMaps'
 
 const ProtectedRoute = ({ component, ...args }) => (
   <Route component={withAuthenticationRequired(component)} {...args} />
@@ -24,6 +25,7 @@ function App() {
         <ProtectedRoute path = '/' exact component={Home}/>
         <Route path = '/login' component={Login}/>
         <Route exact path="/map" render={() => {window.location.href="map.html"}} />
+        <Route path = '/freshMaps' component={Maps}/>
         <ProtectedRoute path = '/triphistory' component={TripHistory}/>
         <ProtectedRoute path = '/gasefficiencyreports' component={Reports}/>
         <ProtectedRoute path = '/userprofile' component={UserProfile}/>

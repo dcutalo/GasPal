@@ -45,11 +45,13 @@ app.post("/trips/insert", (req, res) => {
 app.delete('/trips/delete', (req, res) => {
     const trip_id = req.body.trip_id
     const queryString = "DELETE FROM trip WHERE trip_id = ?"
+    console.log('got to delete trip - trip_id coming in: ' + trip_id)
     connection.query(queryString, [trip_id], function (err, rows, fields) {
         if (err) {
             throw err
         }
         else {
+            console.log('Succesfully removed trip')
             return res.json('Succesfully removed trip');
         }
     })
@@ -277,11 +279,9 @@ app.delete('/usercars/delete/', (req, res) => {
     const queryString = "DELETE FROM user_owned_car WHERE username = ? AND car_id = ?"
     connection.query(queryString, [username, car_id], function (err, rows, fields) {
         if (err) {
-            console.log("screams")
             throw err
         }
         else {
-            console.log("screams x2")
             return res.json('Succesfully removed car from user');
         }
     })
@@ -330,6 +330,33 @@ app.get('/usercars', (req, res) => {
         if (err) throw err
 
         return res.json(rows);
+    })
+});
+
+app.get('/usercarsDefaultCar/:username', (req, res) => {
+    const queryString = "Select * from user_owned_car WHERE username = ? AND default_car=true"  
+    connection.query(queryString, [req.params.username], function (err, rows, fields) {
+
+        if (err) throw err
+
+        return res.json(rows);
+    })
+});
+
+app.get('/usercarsDefaultCar/update', (req, res) => {
+    const username = req.body.username
+    const car_id = req.body.car_id
+    const queryString = `UPDATE user_owned_car SET default_car = false WHERE username = "${username}";
+                         UPDATE user_owned_car SET default_car = true WHERE username = "${username}" AND car_id = ${car_id};`
+
+    console.log(req.body);
+    connection.query(queryString, function (err, rows, fields) {
+        if (err) {
+            throw err
+        }
+        else {
+            return res.json('Update succesful');
+        }
     })
 });
 //end
