@@ -173,17 +173,18 @@ function checkCar(){
     setMyCarBtn(true)
   }
 }
-
+//Capture changes to change email text box and put into an object
 function handleEmailChange(event){
 const name = event.target.name;
 const value = event.target.value;
 setFormInputs(values => ({...formInputs, [name]: value}));
 console.log(formInputs);
 }
+//call api to update email in DB
 function handleEmailChangeSubmit(){
   Axios.put("/users/updateEmail", {
     username: user.nickname,
-    email: formInputs.email.email  
+    email: formInputs.email
   });
 }
 
@@ -240,12 +241,6 @@ if(isLoading) {
        <br></br>
        <br></br>
        <button style={{ fontWeight: 'bold', height:30, width: 200}} onClick={() => setEmailButton(true)}>Update Email</button>
-       <br></br>
-       <br></br>
-       <button style={{ fontWeight: 'bold', height:30, width: 200}} onClick={() => setUserNameBtn()}>Change User Name</button>
-       <br></br>
-       <br></br>
-       <button style={{ fontWeight: 'bold', height:30, width: 200}} onClick={() => setChangePass(true)}>Change Password</button>     
        <br></br>
        <br></br>
        <button style={{ fontWeight: 'bold', color: '#CB1B1E', position: "absolute", bottom: 10, right: 10, height:30, width:100}} onClick={() => setDeleteProfile(true)}> 
@@ -352,24 +347,10 @@ if(isLoading) {
 
         
       <Popup trigger={emailButton} setTrigger={setEmailButton}>
-          <form action="text" onSubmit={handleEmailChangeSubmit}>
+          <form onSubmit={handleEmailChangeSubmit}>
             Enter your new email address:
             <input onChange={handleEmailChange} type="text" placeholder="New Email" required className="emailText" name = 'email' value={formInputs.email}></input>
             <input type="submit"></input>
-          </form>
-        </Popup>
-        <Popup trigger={userNameBtn} setTrigger={setUserNameBtn}>
-          <form action="text">
-            Enter your new user name:
-            <input type="text" placeholder="New User Name" required className="emailText"></input>  
-          </form>
-        </Popup>
-        <Popup trigger={changePass} setTrigger={setChangePass}>
-          <form action="text">
-            Enter your old password:
-            <input type="text" placeholder="Old Password" required className="emailText"></input>
-            {' '}
-            <input type="text" placeholder="New Password" required className="emailText"></input>  
           </form>
         </Popup>
       </div>
