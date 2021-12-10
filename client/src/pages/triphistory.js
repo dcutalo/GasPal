@@ -19,7 +19,7 @@ function TripHistory() {
     const { user } = useAuth0();
     const userAddr = "http://localhost:5000/trips/" + user.nickname;
     const [directions, setDirections] = useState([]);
-
+    const [showMap, setShowMap] = useState(false);
     // use AXIOS to communicate with backend
     useEffect(() => {
         const script = document.createElement('script');
@@ -46,7 +46,7 @@ function TripHistory() {
         {
             setTripList(response.data);
         });
-    }, []);
+    }, [car]);
     
     function deleteTrip() {
         Axios.delete("http://localhost:5000/trips/delete", {
@@ -98,21 +98,16 @@ function TripHistory() {
                 if (val.car_id == val2.car_id) {
                     return (
                         <><h2 className={"tripinfo" + val.car_id}>
-                            make: {val2.make} <br></br>
-                            Trip_ID: {val.trip_id}  Car_ID: {val.car_id}<br></br>
+                            Trip_ID: {val.trip_id}  | Car_ID: {val.car_id} | Gas Tank:{val2.tank_max} Gallons<br></br> 
+                            {val2.make} | {val2.model} | {val2.year} | {val2.trim} | {val2.package}<br></br>
                             Starting Address: {val.start_adr} <br></br>
                             Destination Address: {val.end_adr}<br></br>
-                            Distance: {val.distance} miles
+                            Distance: {val.distance} miles |
+                            Gas Usage: {(val.distance/val2.mpg).toFixed(2)} Gallons ({((val.distance/val2.mpg)/val2.tank_max).toFixed(2)}%)
                         </h2><button style={{ height: 40, width: 200 }} onClick={() => { setConfirm(true); setTripToDelete(val.trip_id); } }>Delete</button>
-
-                        <div>
-                            <WrappedMap
-                                googleMapURL={"https://maps.googleapis.com/maps/api/js?key=AIzaSyBwHhEVEn_9nLrizLT_zf49V2RrTMS83V8&callback=initMap"}
-                                loadingElement={<div style={{ height: `100%` }} />}
-                                containerElement={<div style={{ height: `400px` }} />}
-                                mapElement={<div style={{ height: `100%` }} />}
-                            />
-                        </div>
+                        <button style={{ height: 40, width: 200 }} onClick={() => setShowMap(true) }>Map</button>
+                        <br></br>
+                        <br></br>
                         </>
                     );
                 }
@@ -124,7 +119,17 @@ function TripHistory() {
                 <button className="confirmBtn" style={{ height: 40, width: 200 }} onClick={() => { deleteTrip(); setConfirm(false); } }>Confirm</button>
                 <button className="confirmBtn" style={{ height: 40, width: 200 }} onClick={() => { setConfirm(false)} }>Undo</button>
 
-            </Popup></>
+            </Popup>
+            <Popup trigger={showMap} setTrigger={setShowMap}>
+            <WrappedMap
+                                googleMapURL={"https://maps.googleapis.com/maps/api/js?key=AIzaSyBwHhEVEn_9nLrizLT_zf49V2RrTMS83V8&callback=initMap"}
+                                loadingElement={<div style={{ height: `100%` }} />}
+                                containerElement={<div style={{ height: `400px` }} />}
+                                mapElement={<div style={{ height: `100%` }} />}
+                            />
+        </Popup>
+            </>
+            
         );
 }
 
