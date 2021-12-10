@@ -20,6 +20,8 @@ function TripHistory() {
     const userAddr = "http://localhost:5000/trips/" + user.nickname;
     const [directions, setDirections] = useState([]);
     const [showMap, setShowMap] = useState(false);
+    const [startPlaceId, setStartPlaceId] = useState();
+    const [destPlaceId, setDestPlaceId] = useState();
     // use AXIOS to communicate with backend
     useEffect(() => {
         const script = document.createElement('script');
@@ -64,8 +66,8 @@ function TripHistory() {
         const DirectionsService = new google.maps.DirectionsService();
 
         DirectionsService.route({
-            origin: new google.maps.LatLng(41.8507300, -87.6512600),
-            destination: new google.maps.LatLng(41.8525800, -87.6514100),
+            origin: startPlaceId,
+            destination: destPlaceId,
             travelMode: google.maps.TravelMode.DRIVING,
           }, (result, status) => {
             if (status === google.maps.DirectionsStatus.OK) {
@@ -105,7 +107,7 @@ function TripHistory() {
                             Distance: {val.distance} miles |
                             Gas Usage: {(val.distance/val2.mpg).toFixed(2)} Gallons ({((val.distance/val2.mpg)/val2.tank_max).toFixed(2)}%)
                         </h2><button style={{ height: 40, width: 200 }} onClick={() => { setConfirm(true); setTripToDelete(val.trip_id); } }>Delete</button>
-                        <button style={{ height: 40, width: 200 }} onClick={() => setShowMap(true) }>Map</button>
+                        <button style={{ height: 40, width: 200 }} onClick={() => {setStartPlaceId(val.start_adr); setDestPlaceId(val.end_adr); setShowMap(true);}}>Map</button>
                         <br></br>
                         <br></br>
                         </>
