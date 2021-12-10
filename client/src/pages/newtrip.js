@@ -103,6 +103,7 @@ function NewTrip() {
                 car_id: carId
             }).then(() => {
                 alert("Trip added to trip history!")
+                window.location.reload(false);
                 console.log("Successful insert to trips");
             });
             Axios.put("http://localhost:5000/usercars/update", {
@@ -267,7 +268,6 @@ function NewTrip() {
             <Popup trigger={confirm} setTrigger={setConfirm}>
                 <h3> Are you sure you want to go on this trip?</h3>
                 <button className="confirmBtn" style={{ height: 40, width: 200 }} onClick={() => { newTrip(); setConfirm(false)} }>Confirm</button>
-                <button className="confirmBtn" style={{ height: 40, width: 200 }} onClick={() => {setConfirm(false) } }>Undo</button>
             </Popup>
 
             <Popup trigger = {denied} setDenied={setDenied}>

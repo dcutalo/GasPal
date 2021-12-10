@@ -63,7 +63,7 @@ function Reports() {
                             <h3>
                             CarID: {val.car_id}<br></br>
                             Total Distance Travelled: {parseFloat(distances[i]).toFixed(2)} Miles<br></br>
-                            Total Gas Spent: {(distances[i]/val2.mpg).toFixed(2)} Gallons<br></br>
+                            Total Gas Used: {(distances[i]/val2.mpg).toFixed(2)} Gallons<br></br>
                             Estimated Cost: {((distances[i]/val2.mpg)*3.423).toFixed(2)} USD<br></br>
                             <br></br>
                             </h3>
