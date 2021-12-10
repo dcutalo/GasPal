@@ -102,7 +102,8 @@ function NewTrip() {
                 distance: distance,
                 car_id: carId
             }).then(() => {
-            console.log("Successful insert to trips");
+                alert("Trip added to trip history!")
+                console.log("Successful insert to trips");
             });
             Axios.put("http://localhost:5000/usercars/update", {
                 username: userName,
