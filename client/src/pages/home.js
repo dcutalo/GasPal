@@ -9,8 +9,8 @@ import Select from 'react-select';
 
 const Home = () => {
   const { user, isAuthenticated, isLoading } = useAuth0();
-  var userAddr = "http://localhost:5000/usercars/" + user.nickname;
-
+  var userDefaultCarAddr = "http://localhost:5000/usercarsDefaultCar/" + user.nickname;
+  var userCarsAddr = "http://localhost:5000/usercars/" + user.nickname;
   const [a, setVal] = useState("");
   const [c, setFuel] = useState([]);
   const [cars, setCars] = useState([]);
@@ -21,6 +21,7 @@ const Home = () => {
   const [c_fuel, setCFuel] = useState(0)
   const [confirm, setConfirm] = useState(false);
   const [validInput, setValidInput] = useState(false);
+  const [carToDefault, setCarToDefault] = useState([]);
   /*
   const [fuels, setFuels] = useState([]);
   const [ids, setIDs] = useState([])
@@ -29,16 +30,23 @@ const Home = () => {
   */
   useEffect(() => {
       console.log("made it to this step: set fuel")
-      Axios.get(userAddr).then((response) => 
+      Axios.get(userDefaultCarAddr).then((response) => 
       {
-        setCars(response.data.map(car=>car));
-        /*
-        setFuels(response.data.map(item=>item.current_fuel));
-        setIDs(response.data.map(resp=>resp.car_id));
-        setColors(response.data.map(resp=>resp.color));
-        */
+        setFuel(response.data.map(item=>item.current_fuel));
+        setUserCarID(response.data.map(resp=>resp.car_id));
+        setColor(response.data.map(resp=>resp.color));
       });
   }, []);
+
+  useEffect(() => {
+    console.log("made it to this step: set fuel")
+    Axios.get(userCarsAddr).then((response) => 
+    {
+      setCars(response.data.map(car=>car));
+    });
+}, []);
+
+  
 /*
   function switchCar(){
     if(sw === 0)
@@ -94,6 +102,25 @@ const Home = () => {
     setValidInput(input < 101);
   }
 
+  const changeDefaultCar = carNum => {
+    console.log(carNum);
+    Axios.all([
+      Axios.put("http://localhost:5000/usercarsDefaultCarReset/update", {
+        username: userName
+      }), 
+      Axios.put("http://localhost:5000/usercarsDefaultCarSet/update", {
+        username: userName,
+        car_id: carNum.car_id
+      })
+    ])
+    .then(Axios.spread((data1, data2) => {
+      // output of req.
+      console.log('data1', data1, 'data2', data2)
+    }));
+
+    refreshPage();
+  }
+
   function fillFuel(input){
     if(validInput) {
       setFuel(input)
@@ -140,7 +167,7 @@ const Home = () => {
       <Select options={cars}
         getOptionValue={e => e.car_id}
         getOptionLabel={e => e.car_id}
-        onChange={dosomething}
+        onChange={changeDefaultCar}
       />
       </div>
         </div>

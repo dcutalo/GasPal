@@ -342,11 +342,25 @@ app.get('/usercarsDefaultCar/:username', (req, res) => {
     })
 });
 
-app.get('/usercarsDefaultCar/update', (req, res) => {
+app.put('/usercarsDefaultCarReset/update', (req, res) => {
+    const username = req.body.username
+    const queryString = `UPDATE user_owned_car SET default_car = false WHERE username = "${username}";`
+
+    console.log(req.body);
+    connection.query(queryString, function (err, rows, fields) {
+        if (err) {
+            throw err
+        }
+        else {
+            return res.json('Update succesful');
+        }
+    })
+});
+
+app.put('/usercarsDefaultCarSet/update', (req, res) => {
     const username = req.body.username
     const car_id = req.body.car_id
-    const queryString = `UPDATE user_owned_car SET default_car = false WHERE username = "${username}";
-                         UPDATE user_owned_car SET default_car = true WHERE username = "${username}" AND car_id = ${car_id};`
+    const queryString = `UPDATE user_owned_car SET default_car = true WHERE username = "${username}" AND car_id = ${car_id}`
 
     console.log(req.body);
     connection.query(queryString, function (err, rows, fields) {

@@ -1,13 +1,15 @@
+/*global google*/
 import React, {useState, useEffect} from 'react';
 import TextField from "@material-ui/core/TextField";
 import Axios from 'axios';
 import '../style/newtrip.css';
 import { useAuth0 } from "@auth0/auth0-react";
 import Autocomplete from "react-google-autocomplete";
-import { withScriptjs, withGoogleMap, GoogleMap } from 'react-google-maps';
+import { withScriptjs, withGoogleMap, GoogleMap, DirectionsRenderer } from 'react-google-maps';
 import DistanceMatrixService from 'react-google-maps';
 import { compose, withProps, lifecycle} from "recompose";
-import Popup from './userprofile/Popup'
+import Popup from './userprofile/Popup';
+// import { componentDidMount } from 'react-google-maps/lib/utils/MapChildHelper';
 
 function NewTrip() {
     const { user } = useAuth0();
@@ -25,10 +27,31 @@ function NewTrip() {
     const [startPlaceId, setStartPlaceId] = useState(0);
     const [destPlaceId, setDestPlaceId] = useState(0);
     const [confirm, setConfirm] = useState(false);
+    const [directions, setDirections] = useState();
 
     var distanceNode = require('distance-matrix-api');
     var origins = ["place_id:" + startPlaceId];
     var destinations = ["place_id:" + destPlaceId];
+    const [startingStartPoint, setStartingStartPoint] = useState(41.8507300); 
+    const [startingEndPoint, setStartingEndPoint] = useState(-87.6512600);
+    const [endingStartPoint, setEndingStartPoint] = useState(41.8525800); 
+    const [endingEndPoint, setEndingEndPoint] = useState(-87.6514100);
+    
+
+    const useGoogleMapsScript = url => {
+        useEffect(() => {
+            const script = document.createElement('script');
+            
+            script.src = url;
+            script.async = true;
+            
+            document.body.appendChild(script);
+
+            return () => {
+                document.body.removeChild(script);
+            }
+        }, [url]);
+    }
 
     useEffect(() => {
         Axios.get(userCarEndpoint).then((response) => 
@@ -41,8 +64,8 @@ function NewTrip() {
     }, []);
 
     useEffect(() => {
-        
-    }, [distance]);
+       
+    }, [directions]);
 
     useEffect(() => {
         var carEndpoint = "http://localhost:5000/cars/" + carId;
@@ -99,27 +122,44 @@ function NewTrip() {
     function setStartLocation(place) {
         setStart(place.formatted_address)
         setStartPlaceId(place.place_id)
+        console.log("start: " + place.place_id)
     }
 
     function setDestLocation(place) {
         setDest(place.formatted_address)
         setDestPlaceId(place.place_id)
+        console.log("dest: " + place.place_id)
     }
 
-    // function DistanceMat() {
-    //     return(
-    //         <DistanceMatrixService
-    //             options={{
-    //                 destinations: [destPlaceId],
-    //                 origins: [startPlaceId],
-    //                 travelMode: "DRIVING",
-    //             }}
-    //             /*callback={/*(response) => { console.log(response); } }*//>
-    //     );
-    // }
+    function Map() {
+        useGoogleMapsScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyBwHhEVEn_9nLrizLT_zf49V2RrTMS83V8");
+        const DirectionsService = new google.maps.DirectionsService();
 
-    // const DistanceCalculator = withScriptjs(withGoogleMap(DistanceMat));
-    
+        DirectionsService.route({
+            origin: new google.maps.LatLng(startingStartPoint, startingEndPoint),
+            destination: new google.maps.LatLng(endingStartPoint, endingEndPoint),
+            travelMode: google.maps.TravelMode.DRIVING,
+          }, (result, status) => {
+            if (status === google.maps.DirectionsStatus.OK) {
+
+                setDirections(result);
+                console.log("directions worked: ")
+                console.log(directions)
+            } else {
+              console.error(`error fetching directions ${result}`);
+            }
+        });
+
+        return(
+            <><GoogleMap
+                defaultZoom={10}
+                defaultCenter={new google.maps.LatLng(41.8507300, -87.6512600)}/>
+            <DirectionsRenderer
+                directions={directions} /></>
+        );
+    }
+
+    const WrappedMap = withScriptjs((withGoogleMap(Map)));
 
     function distanceCalculate() {
         distanceNode.key("AlphaDMAvyPM4huAsuOyQbmsOC6aapL4rwZCaRfA");
@@ -186,6 +226,15 @@ function NewTrip() {
              mapElement={<div style={{ height: `100%` }} />}
             /> */}
             
+        </div>
+
+        <div>
+            {/* <WrappedMap
+                googleMapURL={"https://maps.googleapis.com/maps/api/js?key=AIzaSyBwHhEVEn_9nLrizLT_zf49V2RrTMS83V8&callback=initMap"}
+                loadingElement={<div style={{ height: `100%` }} />}
+                containerElement={<div style={{ height: `400px` }} />}
+                mapElement={<div style={{ height: `100%`, width: `25%` }} />}
+            /> */}
         </div>
             
             <button className="preBtn" style={{ height: 50, width: 200 }} onClick={() => {} }>Preview</button>

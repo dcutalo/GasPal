@@ -12,6 +12,8 @@ const endingEndPoint = -87.6514100;
 
 class Maps extends React.PureComponent {
   constructor( props ){
+    super(props);
+    
     this.state = {
       isMarkerShown: false,
       startingStartPoint: 39.702892, 
@@ -23,6 +25,13 @@ class Maps extends React.PureComponent {
 
   componentDidMount() {
     this.delayedShowMarker()
+
+    const script = document.createElement("script");
+
+    script.src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyBwHhEVEn_9nLrizLT_zf49V2RrTMS83V8&callback=initMap";
+    script.async = true;
+
+    document.body.appendChild(script);
   }
 
   delayedShowMarker = () => {
