@@ -176,7 +176,7 @@ const Home = () => {
       </><Popup trigger={confirm} setTrigger={setConfirm}>
           <h3> Save changes?</h3>
           <button className="confirmBtn" style={{ height: 40, width: 200 }} onClick={() => { submitFuel(); setConfirm(false); } }>Confirm</button>
-          <button className="confirmBtn" style={{ height: 40, width: 200 }} onClick={() => {  setConfirm(false); refreshPage();} }>Undo</button>
+          <button className="confirmBtn" style={{ height: 40, width: 200 }} onClick={() => { setConfirm(false); refreshPage();} }>Undo</button>
           
       </Popup></>
       

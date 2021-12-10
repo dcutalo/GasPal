@@ -7,7 +7,7 @@
   font-family: 'Latp', sans-serif;
 }
 
-.home, .gasefficiencyreports, .userprofile, .maps {
+.home, .userprofile, .maps {
   display: flex;
   height: 90vh;
   align-items: center;

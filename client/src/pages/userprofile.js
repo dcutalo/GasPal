@@ -24,7 +24,7 @@ const [myCarBtn, setMyCarBtn] = useState(false);
 const [DeleteProfile, setDeleteProfile] = useState(false);
 const [myCars, setMyCars] = useState([])
 const [carList, setCarList] = useState([])
-const [color, setColor] = useState('#fff')
+const [color, setColor] = useState('#000000')
 //dropdown
 const [visible, setVisible] = React.useState(false);
 const [visible1, setVisible1] = React.useState(false);
@@ -120,10 +120,10 @@ const handleChange4 = value => {
 }
 
 function deleteCarA(){
-  Axios.delete("http://localhost:5000/usercars/delete", {
+  Axios.delete("http://localhost:5000/usercars/delete", {data:{
         username: user.nickname,
-        car_id: deleteC
-  }).then(() => {
+        car_id: deleteC.car_id
+  }}).then(() => {
   console.log("Successful car delete");
   });
   setTri(false)

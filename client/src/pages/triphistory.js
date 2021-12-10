@@ -117,12 +117,12 @@ function TripHistory() {
                     );
                 }
             })
-            )};
+            )}
         </div>
-            <Popup trigger={confirm} setTrigger={setTripToDelete}>
+            <Popup trigger={confirm} setTrigger={setConfirm}>
                 <h3> Are you sure you want to delete this trip?</h3>
                 <button className="confirmBtn" style={{ height: 40, width: 200 }} onClick={() => { deleteTrip(); setConfirm(false); } }>Confirm</button>
-                <button className="undoBtn" style={{ height: 40, width: 200 }} onClick={() => { } }>Undo</button>
+                <button className="confirmBtn" style={{ height: 40, width: 200 }} onClick={() => { setConfirm(false)} }>Undo</button>
 
             </Popup></>
         );

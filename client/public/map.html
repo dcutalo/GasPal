@@ -24,6 +24,7 @@
 	<input type="text" id="destLong"><br><br>
 	
 	<input type="button" onclick= addPoints() value="Build Route">
+  <input type="button" onclick= exit() value="Return">
   <script>
 
 	var startMarker;
@@ -51,7 +52,9 @@
   directionsRenderer.setMap(map); 
     
 }
-  
+  function exit(){
+    window.location.href = "http://localhost:3000/newtrip";
+  }
 	function addPoints(){
 		var startLat = parseFloat(document.getElementById('startLat').value);
 		var startLong = parseFloat(document.getElementById('startLong').value);

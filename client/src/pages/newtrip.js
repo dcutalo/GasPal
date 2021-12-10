@@ -8,9 +8,8 @@ import Autocomplete from "react-google-autocomplete";
 import { withScriptjs, withGoogleMap, GoogleMap, DirectionsRenderer } from 'react-google-maps';
 import DistanceMatrixService from 'react-google-maps';
 import { compose, withProps, lifecycle} from "recompose";
-import Popup from './userprofile/Popup';
-// import { componentDidMount } from 'react-google-maps/lib/utils/MapChildHelper';
-
+import Popup from './userprofile/Popup'
+import {Link } from "react-router-dom";
 function NewTrip() {
     const { user } = useAuth0();
     const userCarEndpoint = "http://localhost:5000/usercarsDefaultCar/" + user.nickname
@@ -20,7 +19,7 @@ function NewTrip() {
     const [fuel, setFuel] = useState([]);
     const [fuel_cap, setFuelCap] = useState(0);
     const [carMPG, setCarMPG] = useState(0);
-    const [carColor, setCarColor] = useState("black")
+    const [carColor, setCarColor] = useState("")
     const [carId, setCarId] = useState(-1);
     const [distance, setDistance] = useState(1005.0);
     const [userName, setUsername] = useState(user.nickname);
@@ -61,7 +60,7 @@ function NewTrip() {
           setCarId(response.data.map(item=>item.car_id));
           setCarColor(response.data.map(item=>item.color));
         });
-    }, []);
+    });
 
     useEffect(() => {
        
@@ -188,9 +187,10 @@ function NewTrip() {
         })
     }
 
+
     return (
         <>
-        <h2 className='destprompt'>Enter destination:</h2>
+        <h2 className='destprompt'>Enter Start Location:</h2>
         <div className='newstart'>
             {/* <TextField
                 value={start}
@@ -237,16 +237,16 @@ function NewTrip() {
             /> */}
         </div>
             
-            <button className="preBtn" style={{ height: 50, width: 200 }} onClick={() => {} }>Preview</button>
+            <Link to = "/map"><button className="preBtn" style={{ height: 50, width: 200 }} onClick={() => {} }>Preview</button></Link>
             <br></br>
             <button className="newBtn" style={{ height: 50, width: 200 }} onClick={() => { distanceCalculate(); } }>Add New Trip</button>
             <br></br>
             <h3>You are currently driving:</h3>
 
-            <Popup trigger={confirm} setTrigger={setDistance}>
+            <Popup trigger={confirm} setTrigger={setConfirm}>
                 <h3> Are you sure you want to go on this trip?</h3>
                 <button className="confirmBtn" style={{ height: 40, width: 200 }} onClick={() => { newTrip(); setConfirm(false)} }>Confirm</button>
-                <button className="undoBtn" style={{ height: 40, width: 200 }} onClick={() => { } }>Undo</button>
+                <button className="confirmBtn" style={{ height: 40, width: 200 }} onClick={() => {setConfirm(false) } }>Undo</button>
           
             </Popup>
             
