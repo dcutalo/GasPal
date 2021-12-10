@@ -5,7 +5,8 @@ import Axios from 'axios';
 import '../style/newtrip.css';
 import { useAuth0 } from "@auth0/auth0-react";
 import Autocomplete from "react-google-autocomplete";
-import { withScriptjs, withGoogleMap, GoogleMap, DirectionsRenderer } from 'react-google-maps';
+import { withScriptjs, GoogleMap, DirectionsRenderer } from 'react-google-maps';
+import withGoogleMap from 'react-google-maps/lib/withGoogleMap';
 import DistanceMatrixService from 'react-google-maps';
 import { compose, withProps, lifecycle} from "recompose";
 import Popup from './userprofile/Popup'
@@ -28,7 +29,12 @@ function NewTrip() {
     const [confirm, setConfirm] = useState(false);
     const [directions, setDirections] = useState();
     const [denied, setDenied] = useState(false);
-
+    const [showMap, setShowMap] = useState(false);
+    const [make, setMake] = useState();
+    const [model, setModel] = useState();
+    const [trim, setTrim] = useState();
+    const [year, setYear] = useState();
+    const [carPackage, setCarPackage] = useState();
     var distanceNode = require('distance-matrix-api');
     var origins = ["place_id:" + startPlaceId];
     var destinations = ["place_id:" + destPlaceId];
@@ -72,8 +78,13 @@ function NewTrip() {
         if(carEndpoint !== null) {
             Axios.get(carEndpoint).then((response) => 
             {
-            setFuelCap(response.data.map(carro=>carro.tank_max));
-            setCarMPG(response.data.map(carro=>carro.mpg));
+                setMake(response.data.map(carro=>carro.make));
+                setModel(response.data.map(carro=>carro.model));
+                setYear(response.data.map(carro=>carro.year));
+                setTrim(response.data.map(carro=>carro.trim));
+                setCarPackage(response.data.map(carro=>carro.package));
+                setFuelCap(response.data.map(carro=>carro.tank_max));
+                setCarMPG(response.data.map(carro=>carro.mpg));
             });
         }
         else {
@@ -133,19 +144,17 @@ function NewTrip() {
     }
 
     function Map() {
-        useGoogleMapsScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyBwHhEVEn_9nLrizLT_zf49V2RrTMS83V8");
+        // useGoogleMapsScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyBwHhEVEn_9nLrizLT_zf49V2RrTMS83V8");
         const DirectionsService = new google.maps.DirectionsService();
 
         DirectionsService.route({
-            origin: new google.maps.LatLng(startingStartPoint, startingEndPoint),
-            destination: new google.maps.LatLng(endingStartPoint, endingEndPoint),
+            origin: start,
+            destination: dest,
             travelMode: google.maps.TravelMode.DRIVING,
           }, (result, status) => {
             if (status === google.maps.DirectionsStatus.OK) {
-
                 setDirections(result);
-                console.log("directions worked: ")
-                console.log(directions)
+                console.log(directions);
             } else {
               console.error(`error fetching directions ${result}`);
             }
@@ -160,7 +169,7 @@ function NewTrip() {
         );
     }
 
-    const WrappedMap = withScriptjs((withGoogleMap(Map)));
+    const WrappedMap = React.memo(withScriptjs((withGoogleMap(Map))));
 
     function distanceCalculate() {
         distanceNode.key("AlphaDMAvyPM4huAsuOyQbmsOC6aapL4rwZCaRfA");
@@ -173,15 +182,9 @@ function NewTrip() {
                 console.log("no distances calculated")
             }
             if (distances.status == 'OK' && distances.rows[0].elements[0].status == 'OK') {
-            //    setDistance(distances.rows[0].elements[0].distance.text.substring)
-                console.log(distances)
                 var num = distances.rows[0].elements[0].distance.value;
-                console.log(num)
-                console.log(typeof(num))
                console.log((distances.rows[0].elements[0].distance.value * 1.0) / 1609.34)
                setDistance(distances.rows[0].elements[0].distance.value / 1609.34)
-               setConfirm(true)
-               console.log(distance)
             }
             else {
                 console.log("distance calculation status: "  + distances.rows[0].elements[0].status)
@@ -229,21 +232,35 @@ function NewTrip() {
             /> */}
             
         </div>
-
-        <div>
             {/* <WrappedMap
                 googleMapURL={"https://maps.googleapis.com/maps/api/js?key=AIzaSyBwHhEVEn_9nLrizLT_zf49V2RrTMS83V8&callback=initMap"}
                 loadingElement={<div style={{ height: `100%` }} />}
                 containerElement={<div style={{ height: `400px` }} />}
                 mapElement={<div style={{ height: `100%`, width: `25%` }} />}
             /> */}
-        </div>
-            
-            <Link to = "/map"><button className="preBtn" style={{ height: 50, width: 200 }} onClick={() => {} }>Preview</button></Link>
+            <Popup trigger={showMap} setTrigger={setShowMap}>
+                <WrappedMap
+                                googleMapURL={"https://maps.googleapis.com/maps/api/js?key=AIzaSyBwHhEVEn_9nLrizLT_zf49V2RrTMS83V8&callback=initMap"}
+                                loadingElement={<div style={{ height: `100%` }} />}
+                                containerElement={<div style={{ height: `400px` }} />}
+                                mapElement={<div style={{ height: `100%` }} />}
+                />
+                This trip will take an estimated {distance.toFixed(2)} miles<br></br>
+                and will take {(distance/carMPG).toFixed(2)} gallons of fuel to travel
+            </Popup>
+
+            <button className="preBtn" style={{ height: 50, width: 200 }} onClick={() => { distanceCalculate(); setShowMap(true); } }>Preview</button>
             <br></br>
-            <button className="newBtn" style={{ height: 50, width: 200 }} onClick={() => { distanceCalculate(); } }>Add New Trip</button>
+            <button className="newBtn" style={{ height: 50, width: 200 }} onClick={() => { distanceCalculate(); setConfirm(true); } }>Add New Trip</button>
             <br></br>
             <h3>You are currently driving:</h3>
+            <h2>
+                
+                {year} {make} {model} {trim} {carPackage}<br></br>
+                With {((fuel / 100) * fuel_cap).toFixed(1)} Gallons of Gas in the Tank <br></br> 
+                Car_ID: {carId} | Max Fill:{fuel_cap} Gallons 
+                </h2>
+                
 
             <Popup trigger={confirm} setTrigger={setConfirm}>
                 <h3> Are you sure you want to go on this trip?</h3>
@@ -261,4 +278,4 @@ function NewTrip() {
     )
 }
 
-export default NewTrip
+export default NewTrip;
