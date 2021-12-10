@@ -45,6 +45,9 @@ const [options3, setoptions3] = useState([])
 const [options4, setoptions4] = useState([])
 const [modelOptions, setModelOptions] = useState([])
 
+//userProfile buttons state variables
+const [formInputs, setFormInputs] = useState({});
+
 console.log("isAuth: ", isAuthenticated)
 console.log("user: ", user)
 console.log("isLoading: " + isLoading)
@@ -169,6 +172,19 @@ function checkCar(){
   else{
     setMyCarBtn(true)
   }
+}
+
+function handleEmailChange(event){
+const name = event.target.name;
+const value = event.target.value;
+setFormInputs(values => ({...formInputs, [name]: value}));
+console.log(formInputs);
+}
+function handleEmailChangeSubmit(){
+  Axios.put("/users/updateEmail", {
+    username: user.nickname,
+    email: formInputs.email.email  
+  });
 }
 
 useEffect(() => {
@@ -336,9 +352,10 @@ if(isLoading) {
 
         
       <Popup trigger={emailButton} setTrigger={setEmailButton}>
-          <form action="text">
+          <form action="text" onSubmit={handleEmailChangeSubmit}>
             Enter your new email address:
-            <input type="text" placeholder="New Email" required className="emailText"></input>  
+            <input onChange={handleEmailChange} type="text" placeholder="New Email" required className="emailText" name = 'email' value={formInputs.email}></input>
+            <input type="submit"></input>
           </form>
         </Popup>
         <Popup trigger={userNameBtn} setTrigger={setUserNameBtn}>
