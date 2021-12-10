@@ -29,9 +29,11 @@ app.post("/trips/insert", (req, res) => {
     const end_adr = req.body.end_adr
     const distance = req.body.distance
     const car_id = req.body.car_id
-    const queryString = "INSERT INTO trip (car_id, username, start_adr, end_adr, distance) VALUES (?,?,?,?,?);"
+    const startPlaceId = req.body.startPlaceId
+    const destPlaceId = req.body.destPlaceId
+    const queryString = "INSERT INTO trip (car_id, username, start_adr, end_adr, distance, startPlaceId, destPlaceId) VALUES (?,?,?,?,?,?,?);"
     
-    connection.query(queryString, [car_id, username, start_adr, end_adr, distance], function (err, rows, fields) {
+    connection.query(queryString, [car_id, username, start_adr, end_adr, distance, startPlaceId, destPlaceId], function (err, rows, fields) {
         if (err) {
             throw err
         }
@@ -180,11 +182,11 @@ app.get('/users', (req, res) => {
 });
 
 app.put("/users/updateUsername", (req, res) => {
-    const username = req.body.username
-    const email = req.body.email
-    const queryString = `UPDATE user SET username = "${username}" WHERE email = "${email}";`
+    const initUsername = req.body.initUsername
+    const finalUsername = req.body.finalUsername
+    const queryString = `UPDATE user SET username = "${finalUsername}" WHERE username = "${initUsername}";`
 
-    connection.query(queryString, [username, email], function (err, rows, fields) {
+    connection.query(queryString, [initUsername, finalUsername], function (err, rows, fields) {
         if (err) {
             throw err
         }
