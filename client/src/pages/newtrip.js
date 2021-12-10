@@ -102,7 +102,8 @@ function NewTrip() {
                 distance: distance,
                 car_id: carId
             }).then(() => {
-            console.log("Successful insert to trips");
+                alert("Trip added to trip history!")
+                console.log("Successful insert to trips");
             });
             Axios.put("http://localhost:5000/usercars/update", {
                 username: userName,
@@ -172,26 +173,27 @@ function NewTrip() {
     const WrappedMap = React.memo(withScriptjs((withGoogleMap(Map))));
 
     function distanceCalculate() {
-        distanceNode.key("AlphaDMAvyPM4huAsuOyQbmsOC6aapL4rwZCaRfA");
-        distanceNode.units('imperial');
-        distanceNode.matrix(origins, destinations, function(err, distances) {
-            if(err) {
-                console.log("There was an error in calculation")
-            }
-            if(!distances) {
-                console.log("no distances calculated")
-            }
-            if (distances.status == 'OK' && distances.rows[0].elements[0].status == 'OK') {
-                var num = distances.rows[0].elements[0].distance.value;
-               console.log((distances.rows[0].elements[0].distance.value * 1.0) / 1609.34)
-               setDistance(distances.rows[0].elements[0].distance.value / 1609.34)
-            }
-            else {
-                console.log("distance calculation status: "  + distances.rows[0].elements[0].status)
-            }
-        })
+        if(destPlaceId != 0 && startPlaceId != 0) {
+            distanceNode.key("AlphaDMAvyPM4huAsuOyQbmsOC6aapL4rwZCaRfA");
+            distanceNode.units('imperial');
+            distanceNode.matrix(origins, destinations, function(err, distances) {
+                if(err) {
+                    console.log("There was an error in calculation")
+                }
+                if(!distances) {
+                    console.log("no distances calculated")
+                }
+                if (distances.status == 'OK' && distances.rows[0].elements[0].status == 'OK') {
+                    var num = distances.rows[0].elements[0].distance.value;
+                console.log((distances.rows[0].elements[0].distance.value * 1.0) / 1609.34)
+                setDistance(distances.rows[0].elements[0].distance.value / 1609.34)
+                }
+                else {
+                    console.log("distance calculation status: "  + distances.rows[0].elements[0].status)
+                }
+            })
+        }
     }
-
 
     return (
         <>
@@ -249,7 +251,7 @@ function NewTrip() {
                 and will take {(distance/carMPG).toFixed(2)} gallons of fuel to travel
             </Popup>
 
-            <button className="preBtn" style={{ height: 50, width: 200 }} onClick={() => { distanceCalculate(); setShowMap(true); } }>Preview</button>
+            <button className="preBtn" style={{ height: 50, width: 200 }} onClick={() => {if( destPlaceId != 0 && startPlaceId != 0){ distanceCalculate(); setShowMap(true);}else {alert("Please enter valid values for both Start and Destination")} } }>Preview</button>
             <br></br>
             <button className="newBtn" style={{ height: 50, width: 200 }} onClick={() => { distanceCalculate(); setConfirm(true); } }>Add New Trip</button>
             <br></br>
