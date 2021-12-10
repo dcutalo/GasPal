@@ -8,6 +8,7 @@ import { SliderPicker } from 'react-color'
 import Profile from '../components/profile.js';
 import {Redirect} from 'react-router-dom';
 import Select from 'react-select';
+import LogoutButton from '../components/logoutButton';
 function UserProfile() {
 const { user, isAuthenticated, isLoading } = useAuth0();
 var userAddr = "http://localhost:5000/usercars/" + user.nickname;
@@ -235,7 +236,8 @@ if(isLoading) {
                   DeleteProfile</button> 
        <br></br>
        <br></br>
-       <button style={{ fontWeight: 'bold', height:30, width: 200}} onClick={() => setLogout(true)}>Logout</button> 
+
+       <LogoutButton style={{ fontWeight: 'bold', height:30, width: 200}} onClick={() => setLogout(true)}>Logout</LogoutButton> 
      </main>
 
      <Popup trigger={blank} setTrigger={setBlank}>

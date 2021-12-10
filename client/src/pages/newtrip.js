@@ -27,6 +27,7 @@ function NewTrip() {
     const [destPlaceId, setDestPlaceId] = useState(0);
     const [confirm, setConfirm] = useState(false);
     const [directions, setDirections] = useState();
+    const [denied, setDenied] = useState(false);
 
     var distanceNode = require('distance-matrix-api');
     var origins = ["place_id:" + startPlaceId];
@@ -60,7 +61,7 @@ function NewTrip() {
           setCarId(response.data.map(item=>item.car_id));
           setCarColor(response.data.map(item=>item.color));
         });
-    });
+    }, []);
 
     useEffect(() => {
        
@@ -101,6 +102,7 @@ function NewTrip() {
         }
         else {
             //popup saying the user does not have enough gas to make the trip
+            setDenied(true);
             console.log("sorry,can't make it")
         }
     };
@@ -247,7 +249,11 @@ function NewTrip() {
                 <h3> Are you sure you want to go on this trip?</h3>
                 <button className="confirmBtn" style={{ height: 40, width: 200 }} onClick={() => { newTrip(); setConfirm(false)} }>Confirm</button>
                 <button className="confirmBtn" style={{ height: 40, width: 200 }} onClick={() => {setConfirm(false) } }>Undo</button>
-          
+            </Popup>
+
+            <Popup trigger = {denied} setDenied={setDenied}>
+                <h3>You can not make this trip with your current fuel level!</h3>
+                <button className="confirmBtn" style={{height:40, width: 200}} onClick={() => {setDenied(false)}}>Close</button>
             </Popup>
             
         </>
