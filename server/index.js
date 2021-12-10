@@ -127,6 +127,34 @@ app.put("/users/update", (req, res) => {
     })
 });
 
+app.put("/users/updateEmail", (req, res) => {
+    const email = req.body.email
+    const queryString = `UPDATE user SET email = ${email} WHERE email = "${email}";`
+
+    connection.query(queryString, function (err, rows, fields) {
+        if (err) {
+            throw err
+        }
+        else {
+            return res.json('Update succesful on email');
+        }
+    })
+});
+
+app.put("/users/updateUserName", (req, res) => {
+    const username = req.body.username
+    const queryString = `UPDATE user SET username = ${username} WHERE username = "${username}";`
+
+    connection.query(queryString, function (err, rows, fields) {
+        if (err) {
+            throw err
+        }
+        else {
+            return res.json('Update succesful on username');
+        }
+    })
+});
+
 //delete
 app.delete('/users/delete', (req, res) => {
     const username = req.body.username
