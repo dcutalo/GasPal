@@ -62,3 +62,7 @@
 .selectCar {
   padding-left: 3%;
 }
+
+.GoogleMap {
+  z-index: -2;
+}

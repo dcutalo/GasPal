@@ -9,8 +9,6 @@ import UserProfile from './pages/userprofile';
 import NewTrip from './pages/newtrip';
 import Login from './pages/login';
 import {withAuthenticationRequired } from '@auth0/auth0-react';
-import { createBrowserHistory } from 'history'
-import Maps from './pages/freshMaps'
 
 const ProtectedRoute = ({ component, ...args }) => (
   <Route component={withAuthenticationRequired(component)} {...args} />

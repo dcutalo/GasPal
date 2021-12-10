@@ -1,8 +1,13 @@
+/*global google*/
 import React, {useState, useEffect} from 'react';
 import '../style/triphistory.css';
 import Axios from 'axios';
 import { useAuth0 } from "@auth0/auth0-react";
 import Popup from './userprofile/Popup'
+import GoogleMap from 'react-google-maps/lib/components/GoogleMap';
+import withScriptjs from 'react-google-maps/lib/withScriptjs';
+import withGoogleMap from 'react-google-maps/lib/withGoogleMap';
+import DirectionsRenderer from 'react-google-maps/lib/components/DirectionsRenderer';
 
 function TripHistory() {
 
@@ -13,19 +18,33 @@ function TripHistory() {
     const [confirm, setConfirm] = useState(false);
     const { user } = useAuth0();
     const userAddr = "http://localhost:5000/trips/" + user.nickname;
-    
+    const [directions, setDirections] = useState([]);
+
     // use AXIOS to communicate with backend
     useEffect(() => {
-        Axios.get(userAddr).then((response) => 
-        {
-            setTripList(response.data);
-        });
+        const script = document.createElement('script');
+        
+        script.src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyBwHhEVEn_9nLrizLT_zf49V2RrTMS83V8&callback=initMap";
+        script.async = true;
+        
+        document.body.appendChild(script);
+
+        return () => {
+            document.body.removeChild(script);
+        }
     }, []);
 
     useEffect(() => {
         Axios.get("http://localhost:5000/cars").then((response) => 
         {
             setCar(response.data);
+        });
+    }, []);
+
+    useEffect(() => {
+        Axios.get(userAddr).then((response) => 
+        {
+            setTripList(response.data);
         });
     }, []);
     
@@ -41,11 +60,41 @@ function TripHistory() {
         window.location.reload(false);
     }
     
+    function Map() {
+        const DirectionsService = new google.maps.DirectionsService();
+
+        DirectionsService.route({
+            origin: new google.maps.LatLng(41.8507300, -87.6512600),
+            destination: new google.maps.LatLng(41.8525800, -87.6514100),
+            travelMode: google.maps.TravelMode.DRIVING,
+          }, (result, status) => {
+            if (status === google.maps.DirectionsStatus.OK) {
+
+                setDirections(result);
+                console.log("directions worked: ")
+                console.log(directions)
+            } else {
+              console.error(`error fetching directions ${result}`);
+            }
+        });
+
+        return(
+            <><GoogleMap
+                className="GoogleMaps"
+                defaultZoom={10}
+                defaultCenter={new google.maps.LatLng(41.8507300, -87.6512600)}/>
+            <DirectionsRenderer
+                directions={directions} /></>
+        );
+    }
+
+    const WrappedMap = withScriptjs((withGoogleMap(Map)));
+
     return (
         <><div className='triphistory'>
             <h1 className="tripHisHeader">Current User Trip History</h1>
             <br></br>
-            {tripList.map((val) => car.map((val2) => {
+            {tripList.reverse().map((val) => car.map((val2) => {
                 if (val.car_id == val2.car_id) {
                     return (
                         <><h2 className={"tripinfo" + val.car_id}>
@@ -54,7 +103,17 @@ function TripHistory() {
                             Starting Address: {val.start_adr} <br></br>
                             Destination Address: {val.end_adr}<br></br>
                             Distance: {val.distance} miles
-                        </h2><button style={{ height: 40, width: 200 }} onClick={() => { setConfirm(true); setTripToDelete(val.trip_id); } }>Delete</button></>
+                        </h2><button style={{ height: 40, width: 200 }} onClick={() => { setConfirm(true); setTripToDelete(val.trip_id); } }>Delete</button>
+
+                        <div>
+                            <WrappedMap
+                                googleMapURL={"https://maps.googleapis.com/maps/api/js?key=AIzaSyBwHhEVEn_9nLrizLT_zf49V2RrTMS83V8&callback=initMap"}
+                                loadingElement={<div style={{ height: `100%` }} />}
+                                containerElement={<div style={{ height: `400px` }} />}
+                                mapElement={<div style={{ height: `100%` }} />}
+                            />
+                        </div>
+                        </>
                     );
                 }
             })
