@@ -25,6 +25,7 @@ const [DeleteProfile, setDeleteProfile] = useState(false);
 const [myCars, setMyCars] = useState([])
 const [carList, setCarList] = useState([])
 const [color, setColor] = useState('#000000')
+const [blank, setBlank] = useState(false);
 //dropdown
 const [visible, setVisible] = React.useState(false);
 const [visible1, setVisible1] = React.useState(false);
@@ -160,7 +161,14 @@ function newCar(){
     });
 };
 
-
+function checkCar(){
+  if(myCars.length == 0){
+    setBlank(true)
+  }
+  else{
+    setMyCarBtn(true)
+  }
+}
 
 useEffect(() => {
   Axios.get('http://localhost:5000/usercars/' + user.nickname).then((response) => 
@@ -188,10 +196,10 @@ useEffect(() => {
 }, []);
 
 
-
 if(isLoading) {
   return <div>Loading...</div>
 }
+
   return (
       <div className="userp">
       <main className="btns">
@@ -211,7 +219,7 @@ if(isLoading) {
       </div>
     
     <br></br>
-      <button style={{ fontWeight: 'bold', height:30, width: 200}} onClick={() => setMyCarBtn(true)}>My Cars</button>     
+      <button style={{ fontWeight: 'bold', height:30, width: 200}} onClick={() => checkCar()}>My Cars</button>     
        <br></br>
        <br></br>
        <button style={{ fontWeight: 'bold', height:30, width: 200}} onClick={() => setEmailButton(true)}>Update Email</button>
@@ -230,8 +238,13 @@ if(isLoading) {
        <button style={{ fontWeight: 'bold', height:30, width: 200}} onClick={() => setLogout(true)}>Logout</button> 
      </main>
 
+     <Popup trigger={blank} setTrigger={setBlank}>
+      <h3>You currently have no cars added</h3>
+     <button className ="confirmBtn" style={{ fontWeight: 'bold', height:30, width: 200}} onClick={() => setAddCar(true)}>Add New Car</button>
+     </Popup>
+
      <Popup trigger={myCarBtn} setTrigger={setMyCarBtn}>
-       
+      
      {myCars.map((car) =>{
           for (var i = 0; i<options.length; i++){
             if(options[i].car_id === car.car_id){
@@ -245,6 +258,7 @@ if(isLoading) {
           }
        })
       }
+      
        <button className ="confirmBtn" style={{ fontWeight: 'bold', height:30, width: 200}} onClick={() => setAddCar(true)}>Add New Car</button>
        <button className ="confirmBtn" style={{ fontWeight: 'bold', height:30, width: 200}} onClick={() => setDeleteCar(true)}>Delete Car</button>
       </Popup>

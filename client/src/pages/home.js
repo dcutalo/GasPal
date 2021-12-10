@@ -99,7 +99,9 @@ const Home = () => {
   }
 
   function validateInput(input) {
+    
     setValidInput(input < 101);
+    
   }
 
   const changeDefaultCar = carNum => {
@@ -122,6 +124,11 @@ const Home = () => {
   }
 
   function fillFuel(input){
+
+    if(cars.length==0){
+      alert("No cars added")
+    }
+    else {
     if(validInput) {
       setFuel(input)
       setCFuel(input)
@@ -130,6 +137,7 @@ const Home = () => {
     else {
       alert("Invalid Input: " + input + " please enter a value less than 100");
     }
+  }
   }
 
   function dosomething(){
