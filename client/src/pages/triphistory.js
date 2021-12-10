@@ -105,7 +105,7 @@ function TripHistory() {
                             Starting Address: {val.start_adr} <br></br>
                             Destination Address: {val.end_adr}<br></br>
                             Distance: {val.distance} miles |
-                            Gas Usage: {(val.distance/val2.mpg).toFixed(2)} Gallons ({((val.distance/val2.mpg)/val2.tank_max).toFixed(2)}%)
+                            Gas Usage: {(val.distance/val2.mpg).toFixed(2)} Gallons ({(((val.distance/val2.mpg)/val2.tank_max).toFixed(2))* 100}%)
                         </h2><button style={{ height: 40, width: 200 }} onClick={() => { setConfirm(true); setTripToDelete(val.trip_id); } }>Delete</button>
                         <button style={{ height: 40, width: 200 }} onClick={() => {setStartPlaceId(val.start_adr); setDestPlaceId(val.end_adr); setShowMap(true);}}>Map</button>
                         <br></br>
