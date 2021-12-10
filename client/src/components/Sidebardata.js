@@ -34,12 +34,5 @@ export const SidebarData = [
         path: '/newtrip',
         icon: <BiIcons.BiTrip />,
         cName: 'side-text'
-    },
-    {
-        title: 'Login',
-        path: '/login',
-        icon: <AiIcons.AiFillBook />,
-        cName: 'side-text'
     }
-
 ]

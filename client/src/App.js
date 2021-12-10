@@ -7,7 +7,6 @@ import TripHistory from './pages/triphistory';
 import Reports from './pages/gasefficiencyreports';
 import UserProfile from './pages/userprofile';
 import NewTrip from './pages/newtrip';
-import Login from './pages/login';
 import {withAuthenticationRequired } from '@auth0/auth0-react';
 
 const ProtectedRoute = ({ component, ...args }) => (
@@ -21,7 +20,6 @@ function App() {
       <Sidebar />
       <Switch>
         <ProtectedRoute path = '/' exact component={Home}/>
-        <Route path = '/login' component={Login}/>
         <Route exact path="/map" render={() => {window.location.href="map.html"}} />
         <ProtectedRoute path = '/triphistory' component={TripHistory}/>
         <ProtectedRoute path = '/gasefficiencyreports' component={Reports}/>
